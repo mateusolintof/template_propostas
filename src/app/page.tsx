@@ -14,6 +14,10 @@ import {
   Brain,
   Lightbulb,
   FileBarChart,
+  UserRound,
+  Sparkles,
+  PanelsTopLeft,
+  CheckCircle2,
 } from "lucide-react";
 import Modal from "./components/Modal";
 import { type FlowKind } from "./components/FlowDiagram";
@@ -262,55 +266,51 @@ export default function Home() {
           <h2 className="section-title">Fluxo e Ferramentas Inteligentes</h2>
           <p className="subtitle mt-2">Fluxograma dos agentes e exemplos das ferramentas</p>
           <h3 className="mt-8 font-bold text-prime">AGENTES DE IA</h3>
-          
-          {/* Quadro de Etapas do Processo */}
-          <div className="mt-6 card bg-white">
-            <div className="grid md:grid-cols-4 gap-6">
+
+          {/* Quadro de Etapas (layout atualizado) */}
+          <div className="mt-6 rounded-2xl border border-slate-100 bg-white shadow-sm ring-1 ring-slate-100/60">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
               {[
                 {
                   etapa: 1,
-                  icon: "👤",
                   title: "Recepção",
                   description: "Paciente envia mensagem",
+                  icon: <UserRound className="h-5 w-5" />,
                 },
                 {
                   etapa: 2,
-                  icon: "⚡",
                   title: "Agente SDR",
                   description: "Identifica a necessidade",
+                  icon: <Sparkles className="h-5 w-5" />,
                 },
                 {
                   etapa: 3,
-                  icon: "📋",
                   title: "Triagem",
                   description: "Encaminha para subfunil",
+                  icon: <PanelsTopLeft className="h-5 w-5" />,
                 },
                 {
                   etapa: 4,
-                  icon: "✅",
                   title: "Atendimento",
                   description: "Resolve ou agenda",
+                  icon: <CheckCircle2 className="h-5 w-5" />,
                 },
               ].map((item) => (
-                <div key={item.etapa} className="flex flex-col">
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="relative flex-shrink-0">
-                      <div className="w-12 h-12 rounded-full bg-prime-accent/10 border border-prime-accent/30 flex items-center justify-center">
-                        <span className="text-xl">{item.icon}</span>
-                      </div>
+                <div key={item.etapa} className="p-6 lg:p-8 flex flex-col items-start text-left">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-prime-accent/15 border border-prime-accent/30 text-prime flex items-center justify-center">
+                      {item.icon}
                     </div>
-                    <div className="flex-1">
-                      <div className="text-sm font-semibold text-prime mb-1">Etapa {item.etapa}</div>
-                      <h4 className="font-bold text-slate-900 mb-1">{item.title}</h4>
-                      <p className="text-sm text-slate-700 mb-3">{item.description}</p>
-                      <button
-                        onClick={() => setModal({ type: "etapa", etapa: item.etapa as 1 | 2 | 3 | 4 })}
-                        className="text-sm text-prime hover:text-prime-accent underline font-medium transition-colors"
-                      >
-                        Ver mais
-                      </button>
-                    </div>
+                    <span className="text-sm font-semibold text-prime">Etapa {item.etapa}</span>
                   </div>
+                  <h4 className="mt-3 text-xl font-extrabold text-slate-900">{item.title}</h4>
+                  <p className="mt-1 text-slate-600 text-sm">{item.description}</p>
+                  <button
+                    onClick={() => setModal({ type: "etapa", etapa: item.etapa as 1 | 2 | 3 | 4 })}
+                    className="mt-4 text-sm font-semibold text-prime underline decoration-2 underline-offset-4 hover:text-prime-accent"
+                  >
+                    Ver mais
+                  </button>
                 </div>
               ))}
             </div>
