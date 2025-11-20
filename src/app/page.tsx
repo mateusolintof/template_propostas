@@ -44,6 +44,7 @@ type ModalKind =
   | { type: "inteligencia" }
   | { type: "insights" }
   | { type: "relatorios" }
+  | { type: "etapa"; etapa: 1 | 2 | 3 | 4 }
   | null;
 
 export default function Home() {
@@ -260,6 +261,60 @@ export default function Home() {
           <h2 className="section-title">Fluxo e Ferramentas Inteligentes</h2>
           <p className="subtitle mt-2">Fluxograma dos agentes e exemplos das ferramentas</p>
           <h3 className="mt-8 font-bold text-prime">AGENTES DE IA</h3>
+          
+          {/* Quadro de Etapas do Processo */}
+          <div className="mt-6 card bg-white">
+            <div className="grid md:grid-cols-4 gap-6">
+              {[
+                {
+                  etapa: 1,
+                  icon: "👤",
+                  title: "Recepção",
+                  description: "Paciente envia mensagem",
+                },
+                {
+                  etapa: 2,
+                  icon: "⚡",
+                  title: "Agente SDR",
+                  description: "Identifica a necessidade",
+                },
+                {
+                  etapa: 3,
+                  icon: "📋",
+                  title: "Triagem",
+                  description: "Encaminha para subfunil",
+                },
+                {
+                  etapa: 4,
+                  icon: "✅",
+                  title: "Atendimento",
+                  description: "Resolve ou agenda",
+                },
+              ].map((item) => (
+                <div key={item.etapa} className="flex flex-col">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="relative flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-prime-accent/10 border border-prime-accent/30 flex items-center justify-center">
+                        <span className="text-xl">{item.icon}</span>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-semibold text-prime mb-1">Etapa {item.etapa}</div>
+                      <h4 className="font-bold text-slate-900 mb-1">{item.title}</h4>
+                      <p className="text-sm text-slate-700 mb-3">{item.description}</p>
+                      <button
+                        onClick={() => setModal({ type: "etapa", etapa: item.etapa as 1 | 2 | 3 | 4 })}
+                        className="text-sm text-prime hover:text-prime-accent underline font-medium transition-colors"
+                      >
+                        Ver mais
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-4 grid md:grid-cols-3 gap-6">
             {[
               { key: "agendamento" as FlowKind, title: "SDR Qualificador + Agendamento" },
@@ -605,6 +660,162 @@ export default function Home() {
       <Modal open={modal?.type === "relatorios"} onClose={() => setModal(null)} title="Relatórios Avançados com Cruzamento de Dados">
         <RelatoriosModalContentDoc />
       </Modal>
+
+      {/* Modais das Etapas */}
+      <Modal
+        open={modal?.type === "etapa"}
+        onClose={() => setModal(null)}
+        title={modal?.type === "etapa" ? `Etapa ${modal.etapa} - ${getEtapaTitle(modal.etapa)}` : "Etapa"}
+        size="md"
+      >
+        <EtapaModalContent etapa={modal?.type === "etapa" ? modal.etapa : 1} />
+      </Modal>
+    </div>
+  );
+}
+
+// Helper para obter o título da etapa
+function getEtapaTitle(etapa: 1 | 2 | 3 | 4): string {
+  const titles = {
+    1: "Recepção",
+    2: "Agente SDR",
+    3: "Triagem",
+    4: "Atendimento",
+  };
+  return titles[etapa];
+}
+
+// Componente de conteúdo dos modais das etapas
+function EtapaModalContent({ etapa }: { etapa: 1 | 2 | 3 | 4 }) {
+  const etapaData = {
+    1: {
+      title: "Etapa 1 - Recepção",
+      intro: "Primeiro contato do paciente. O agente responde imediatamente, com tom humano e acolhedor.",
+      bullets: [
+        "Detecta se é primeira vez ou retorno",
+        "Identifica urgência na mensagem",
+        "Cria rapport com linguagem simples",
+      ],
+      omnichannel: {
+        title: "Canais omnichannel",
+        description: "Site, WhatsApp, Instagram, formulários e demais canais configurados convergem para uma fila única.",
+      },
+    },
+    2: {
+      title: "Etapa 2 — Agente SDR",
+      intro: "Qualificação inteligente com perguntas contextuais e sem menus engessados.",
+      bullets: [
+        "Identifica a necessidade (consulta ou exame)",
+        "Coleta: convênio ou particular",
+        "Adapta perguntas conforme respostas",
+        "Evita perguntas desnecessárias",
+      ],
+    },
+    3: {
+      title: "Etapa 3 — Triagem",
+      intro: "Encaminhamento para o subfunil correto com coleta mínima de dados.",
+      cards: [
+        {
+          title: "Convênio",
+          bullets: [
+            "Nome do convênio",
+            "Número da carteirinha e validade",
+            "Especialista desejado",
+          ],
+        },
+        {
+          title: "Particular",
+          bullets: [
+            "Nome completo, CPF e telefone",
+            "Especialista desejado",
+          ],
+        },
+      ],
+      footer: "Valida dados em tempo real e prepara o agendamento.",
+    },
+    4: {
+      title: "Etapa 4 — Atendimento",
+      intro: "Agendamento inteligente com consulta de agenda em tempo real.",
+      bullets: [
+        "Apresenta opções formatadas (data/horário)",
+        "Confirma a escolha e registra no sistema",
+        "Dispara confirmação e orientações",
+        "Automatiza lembretes e follow-up (reduz no-show)",
+      ],
+    },
+  };
+
+  const data = etapaData[etapa];
+
+  return (
+    <div className="p-4 md:p-6 space-y-6">
+      <div className="space-y-4">
+        <p className="text-slate-700 leading-relaxed">{data.intro}</p>
+
+        {etapa === 1 && (
+          <>
+            <ul className="space-y-2 text-slate-700">
+              {data.bullets?.map((bullet, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="text-prime mt-1">•</span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+            {data.omnichannel && (
+              <div className="bg-prime-accent/5 rounded-lg border border-prime-accent/20 p-4 mt-6">
+                <h4 className="font-bold text-prime mb-2">{data.omnichannel.title}</h4>
+                <p className="text-slate-700 text-sm">{data.omnichannel.description}</p>
+              </div>
+            )}
+          </>
+        )}
+
+        {etapa === 2 && (
+          <ul className="space-y-2 text-slate-700">
+            {data.bullets?.map((bullet, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-prime mt-1">•</span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {etapa === 3 && (
+          <>
+            <div className="grid md:grid-cols-2 gap-4">
+              {data.cards?.map((card, idx) => (
+                <div key={idx} className="bg-white rounded-lg border border-slate-200 p-4">
+                  <h4 className="font-bold text-prime mb-3">{card.title}</h4>
+                  <ul className="space-y-2 text-slate-700">
+                    {card.bullets.map((bullet, bulletIdx) => (
+                      <li key={bulletIdx} className="flex items-start gap-2">
+                        <span className="text-prime mt-1">•</span>
+                        <span className="text-sm">{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            {data.footer && (
+              <p className="text-slate-700 text-sm mt-4">{data.footer}</p>
+            )}
+          </>
+        )}
+
+        {etapa === 4 && (
+          <ul className="space-y-2 text-slate-700">
+            {data.bullets?.map((bullet, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-prime mt-1">•</span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
