@@ -11,9 +11,20 @@ type ModalProps = {
   children: React.ReactNode;
   scrollContent?: boolean; // default true
   size?: "full" | "md"; // default full
+  titleAlign?: "left" | "center";
+  closeLabel?: string;
 };
 
-export default function Modal({ open, onClose, title, children, scrollContent = true, size = "full" }: ModalProps) {
+export default function Modal({
+  open,
+  onClose,
+  title,
+  children,
+  scrollContent = true,
+  size = "full",
+  titleAlign = "left",
+  closeLabel,
+}: ModalProps) {
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -59,14 +70,30 @@ export default function Modal({ open, onClose, title, children, scrollContent = 
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 md:px-6 py-3 flex-shrink-0">
-              <h3 className="text-lg md:text-xl font-bold text-prime">{title}</h3>
+            <div
+              className={`relative flex items-center border-b border-slate-200 px-4 md:px-6 py-3 flex-shrink-0 ${
+                titleAlign === "center" ? "justify-center" : "justify-between"
+              }`}
+            >
+              <h3
+                className={`text-lg md:text-xl font-bold text-prime ${
+                  titleAlign === "center" ? "w-full text-center" : ""
+                }`}
+              >
+                {title}
+              </h3>
               <button
                 aria-label="Fechar"
                 onClick={onClose}
-                className="rounded-md p-2 hover:bg-slate-100 text-slate-700"
+                className={`rounded-md p-2 hover:bg-slate-100 text-slate-700 ${
+                  titleAlign === "center" ? "absolute right-4 md:right-6" : ""
+                }`}
               >
-                <X className="h-5 w-5" />
+                {closeLabel ? (
+                  <span className="text-sm font-semibold">{closeLabel}</span>
+                ) : (
+                  <X className="h-5 w-5" />
+                )}
               </button>
             </div>
             <div className={`w-full flex-1 ${scrollContent ? "overflow-auto" : "overflow-hidden"}`}>
