@@ -437,7 +437,7 @@ export default function Home() {
           </button>
         ))}
       </div>
-      <div className="mt-4 text-base text-slate-600">As estimativas podem ser alteradas de acordo com a complexidades dos fluxos demandados pelo cliente</div>
+      <div className="mt-4 text-base text-slate-600">As estimativas podem ser alteradas de acordo com a complexidade dos fluxos demandados pelo cliente</div>
         </div>
       </section>
 

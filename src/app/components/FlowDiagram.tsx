@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo } from "react";
+import { useReducedMotion } from "framer-motion";
 import ReactFlow, {
   Background,
   Controls,
@@ -102,18 +103,25 @@ function nodesAndEdges(kind: FlowKind): { nodes: Node[]; edges: Edge[] } {
 }
 
 export default function FlowDiagram({ kind }: { kind: FlowKind }) {
-  const { nodes: initialNodes, edges: initialEdges } = useMemo(() => nodesAndEdges(kind), [kind]);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const shouldReduceMotion = useReducedMotion();
+  const { nodes: initialNodesRaw, edges: initialEdgesRaw } = useMemo(() => nodesAndEdges(kind), [kind]);
+  const initialEdges = useMemo(
+    () => initialEdgesRaw.map((edge) => ({ ...edge, animated: shouldReduceMotion ? false : edge.animated })),
+    [initialEdgesRaw, shouldReduceMotion]
+  );
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodesRaw);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   useEffect(() => {
-    setNodes(initialNodes);
+    setNodes(initialNodesRaw);
     setEdges(initialEdges);
-  }, [initialNodes, initialEdges, setNodes, setEdges]);
+  }, [initialNodesRaw, initialEdges, setNodes, setEdges]);
 
   const onConnect = useCallback(
-    (connection: Connection) => setEdges((eds) => addEdge({ ...connection, animated: true }, eds)),
-    [setEdges]
+    (connection: Connection) =>
+      setEdges((eds) => addEdge({ ...connection, animated: shouldReduceMotion ? false : true }, eds)),
+    [setEdges, shouldReduceMotion]
   );
 
   return (

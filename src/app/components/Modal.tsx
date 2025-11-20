@@ -27,6 +27,7 @@ export default function Modal({
   closeLabel,
 }: ModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousFocusedElementRef = useRef<HTMLElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -38,6 +39,18 @@ export default function Modal({
     return () => {
       document.body.style.overflow = "auto";
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      const activeElement = document.activeElement;
+      if (activeElement instanceof HTMLElement) {
+        previousFocusedElementRef.current = activeElement;
+      }
+    } else if (previousFocusedElementRef.current && document.contains(previousFocusedElementRef.current)) {
+      previousFocusedElementRef.current.focus();
+      previousFocusedElementRef.current = null;
+    }
   }, [open]);
 
   useEffect(() => {
