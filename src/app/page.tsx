@@ -60,6 +60,7 @@ export default function Home() {
             <Image src="/branding/logo.svg" alt={`Logo ${preparedFor}`} width={120} height={40} />
           </div>
           <nav className="ml-auto hidden md:flex items-center gap-6 text-sm">
+            <a className="hover:text-prime" href="#quem-somos">Quem Somos</a>
             <a className="hover:text-prime" href="#desafio">Desafio</a>
             <a className="hover:text-prime" href="#solucoes">Soluções</a>
             <a className="hover:text-prime" href="#fluxos">Fluxos</a>
@@ -91,6 +92,45 @@ export default function Home() {
           </div>
           <div className="flex justify-center">
             <Image src="/branding/logo.svg" width={420} height={150} alt={`Logo ${preparedFor}`} className="drop-shadow-md" />
+          </div>
+        </div>
+      </section>
+
+      {/* QUEM SOMOS NÓS */}
+      <section className="section bg-white" id="quem-somos">
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="section-title">
+            Quem é a <span className="text-prime-accent">Convert.AI</span>?
+          </h2>
+          <div className="mt-4 h-1 w-20 bg-prime-accent rounded-full"></div>
+          
+          <div className="mt-10 card">
+            <h3 className="text-xl md:text-2xl font-bold text-prime mb-6">Nossa História</h3>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="text-slate-700 leading-relaxed">
+                <p>
+                  Somos uma <span className="font-semibold text-prime-accent">agência especializada em tráfego pago</span> para{" "}
+                  <span className="font-semibold text-prime-accent">clínicas médicas</span> há mais de 6 anos, com expertise comprovada em performance e crescimento no setor de saúde.
+                </p>
+              </div>
+              
+              <div className="text-slate-700 leading-relaxed">
+                <p>
+                  Durante nossa jornada, identificamos que um <span className="font-semibold text-prime-accent">atendimento deficitário</span> impactava drasticamente as{" "}
+                  <span className="font-semibold text-prime-accent">conversões finais</span>, mesmo com campanhas de alta performance. Com o advento dos{" "}
+                  <span className="font-semibold text-prime-accent">Agentes de IA</span>, unimos expertise em marketing médico com tecnologia de IA, criando soluções específicas para nossos clientes.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 card bg-gradient-to-r from-prime-accent/10 to-prime/5 border-prime-accent/30">
+            <p className="text-center text-lg md:text-xl font-semibold text-slate-800">
+              <span className="text-prime-accent">Expertise em Marketing</span> +{" "}
+              <span className="text-prime-accent">Tecnologia de IA</span> ={" "}
+              <span className="text-prime-accent">Resultados</span>
+            </p>
           </div>
         </div>
       </section>
