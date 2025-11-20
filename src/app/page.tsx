@@ -38,6 +38,66 @@ const FlowDiagramLazy = dynamic<{ kind: FlowKind }>(
   }
 );
 
+const ModalContentFallback = () => (
+  <div className="flex h-full items-center justify-center p-6 text-sm text-slate-500">
+    Carregando conteúdo...
+  </div>
+);
+
+const RoiModalLazy = dynamic<{ preparedFor: string }>(
+  () => import("./components/modal-content/RoiModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const CRMModalLazy = dynamic(
+  () => import("./components/modal-content/CRMModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const DashboardModalLazy = dynamic(
+  () => import("./components/modal-content/DashboardModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const PhaseDetailModalLazy = dynamic<{ phase: 1 | 2 | 3 | 4 }>(
+  () => import("./components/modal-content/PhaseDetailModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const ConquistasModalLazy = dynamic(
+  () => import("./components/modal-content/ConquistasModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const InteligenciaModalLazy = dynamic(
+  () => import("./components/modal-content/InteligenciaModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const InsightsModalLazy = dynamic(
+  () => import("./components/modal-content/InsightsModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const RelatoriosModalLazy = dynamic(
+  () => import("./components/modal-content/RelatoriosModalContentDoc"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const EtapaModalLazy = dynamic<{ etapa: 1 | 2 | 3 | 4 }>(
+  () => import("./components/modal-content/EtapaModalContent"),
+  { ssr: false, loading: () => <ModalContentFallback /> }
+);
+
+const etapaTitles: Record<1 | 2 | 3 | 4, string> = {
+  1: "Recepção",
+  2: "Agente SDR",
+  3: "Triagem",
+  4: "Atendimento",
+};
+
+const getEtapaTitle = (etapa: 1 | 2 | 3 | 4) => etapaTitles[etapa];
+
 type ModalKind =
   | { type: "solution"; kind: FlowKind; title: string }
   | { type: "crm" }
@@ -153,33 +213,33 @@ export default function Home() {
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Alto volume sem qualificação</h3>
               <ul className="mt-3 space-y-1 text-slate-700">
-                <li>• ~150 leads/dia; 1 lead a cada 3,2 min</li>
-                <li>• Qualificação básica consome 80% do tempo</li>
-                <li>• Falta priorização por urgência/aderência</li>
+                <li>~150 leads/dia; 1 lead a cada 3,2 min</li>
+                <li>Qualificação básica consome 80% do tempo</li>
+                <li>Falta priorização por urgência/aderência</li>
               </ul>
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Agendas desconectadas</h3>
               <ul className="mt-3 space-y-1 text-slate-700">
-                <li>• Hospital IOP (Tasy) vs agenda particular</li>
-                <li>• Conflitos e sobreposições</li>
-                <li>• Dificuldade de encaixes e remarcações</li>
+                <li>Hospital IOP (Tasy) vs agenda particular</li>
+                <li>Conflitos e sobreposições</li>
+                <li>Dificuldade de encaixes e remarcações</li>
               </ul>
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Zero visibilidade comercial</h3>
               <ul className="mt-3 space-y-1 text-slate-700">
-                <li>• Não mede taxa de qualificação/conversão</li>
-                <li>• Gargalos desconhecidos no funil</li>
-                <li>• Sem previsão de no-show</li>
+                <li>Não mede taxa de qualificação/conversão</li>
+                <li>Gargalos desconhecidos no funil</li>
+                <li>Sem previsão de no-show</li>
               </ul>
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Tempo de resposta e follow-up</h3>
               <ul className="mt-3 space-y-1 text-slate-700">
-                <li>• Leads fora do horário se perdem</li>
-                <li>• Falta follow-up estruturado</li>
-                <li>• Leads qualificados esfriam sem ação</li>
+                <li>Leads fora do horário se perdem</li>
+                <li>Falta follow-up estruturado</li>
+                <li>Leads qualificados esfriam sem ação</li>
               </ul>
             </div>
           </div>
@@ -200,33 +260,33 @@ export default function Home() {
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><CalendarCheck2 className="h-5 w-5"/> SDR Qualificador + Agendamento (WhatsApp)</div>
                 <ul className="mt-2 text-slate-700 space-y-1">
-                  <li>• Atendimento 24/7 com resposta imediata</li>
-                  <li>• Qualificação automática (particular × convênio)</li>
-                  <li>• Validação de convênios e proposta de horários</li>
+                  <li>Atendimento 24/7 com resposta imediata</li>
+                  <li>Qualificação automática (particular × convênio)</li>
+                  <li>Validação de convênios e proposta de horários</li>
                 </ul>
               </div>
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><MessageSquare className="h-5 w-5"/> FAQ Inteligente (Educacional)</div>
                 <ul className="mt-2 text-slate-700 space-y-1">
-                  <li>• Procedimentos, recuperação e valores/convênios</li>
-                  <li>• Sobre o médico, localização e horários</li>
-                  <li>• Convida a agendar ao final (conversão)</li>
+                  <li>Procedimentos, recuperação e valores/convênios</li>
+                  <li>Sobre o médico, localização e horários</li>
+                  <li>Convida a agendar ao final (conversão)</li>
                 </ul>
               </div>
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><BellRing className="h-5 w-5"/> Anti No‑Show + Follow‑Up</div>
                 <ul className="mt-2 text-slate-700 space-y-1">
-                  <li>• Lembretes D‑2, D‑1 e D‑2h + confirmação</li>
-                  <li>• Reagendamento automático e fila de espera</li>
-                  <li>• Follow‑up pós‑consulta (NPS, retornos, exames)</li>
+                  <li>Lembretes D‑2, D‑1 e D‑2h + confirmação</li>
+                  <li>Reagendamento automático e fila de espera</li>
+                  <li>Follow‑up pós‑consulta (NPS, retornos, exames)</li>
                 </ul>
               </div>
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><Stethoscope className="h-5 w-5"/> CRM + Agenda Unificada + Dashboard</div>
                 <ul className="mt-2 text-slate-700 space-y-1">
-                  <li>• Unifica Hospital IOP (Tasy) + particular</li>
-                  <li>• Funis, tags e histórico completo no CRM</li>
-                  <li>• KPIs, funil e relatórios executivos</li>
+                  <li>Unifica Hospital IOP (Tasy) + particular</li>
+                  <li>Funis, tags e histórico completo no CRM</li>
+                  <li>KPIs, funil e relatórios executivos</li>
                 </ul>
               </div>
             </div>
@@ -249,11 +309,11 @@ export default function Home() {
             <div className="card">
               <div className="font-semibold text-prime">CONFIABILIDADE E SEGURANÇA</div>
               <ul className="mt-3 space-y-4 text-slate-700">
-                <li>• Fallback: humanos assumem quando necessário.</li>
-                <li>• Monitoramento (alertas em tempo real, playbook e reprocessamento).</li>
-                <li>• Privacidade &amp; LGPD</li>
-                <li>• Segurança dos dados de ponta a ponta</li>
-                <li>• Suporte (com SLA pré-definido).</li>
+                <li>Fallback: humanos assumem quando necessário.</li>
+                <li>Monitoramento (alertas em tempo real, playbook e reprocessamento).</li>
+                <li>Privacidade &amp; LGPD</li>
+                <li>Segurança dos dados de ponta a ponta</li>
+                <li>Suporte (com SLA pré-definido).</li>
               </ul>
             </div>
           </div>
@@ -362,12 +422,19 @@ export default function Home() {
           { phase: 3, title: "Integrações e Painéis", icon: "🔗" },
           { phase: 4, title: "Testes e Go-Live", icon: "🚀" },
         ].map((item) => (
-          <div key={item.phase} className="card hover:shadow-md transition-shadow cursor-pointer group" onClick={() => setModal({ type: "phases", phase: item.phase as 1 | 2 | 3 | 4 })}>
-            <div className="text-2xl md:text-3xl mb-2">{item.icon}</div>
+          <button
+            key={item.phase}
+            type="button"
+            className="card hover:shadow-md transition-shadow text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-prime"
+            onClick={() => setModal({ type: "phases", phase: item.phase as 1 | 2 | 3 | 4 })}
+          >
+            <div className="text-2xl md:text-3xl mb-2" aria-hidden>
+              {item.icon}
+            </div>
             <div className="text-base md:text-lg font-semibold text-prime mb-1">FASE {item.phase}</div>
             <h3 className="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
             <div className="text-prime text-sm font-semibold group-hover:underline">Ver detalhes →</div>
-          </div>
+          </button>
         ))}
       </div>
       <div className="mt-4 text-base text-slate-600">As estimativas podem ser alteradas de acordo com a complexidades dos fluxos demandados pelo cliente</div>
@@ -468,10 +535,10 @@ export default function Home() {
                   <div className="text-lg font-semibold">R$ 800,00/mês</div>
                 </div>
                 <ul className="mt-2 text-sm text-slate-700 space-y-1">
-                  <li>• Agente FAQ especialista</li>
-                  <li>• Base de conhecimento completa</li>
-                  <li>• Integração com WhatsApp</li>
-                  <li>• Métricas de conversão FAQ→Lead</li>
+                  <li>Agente FAQ especialista</li>
+                  <li>Base de conhecimento completa</li>
+                  <li>Integração com WhatsApp</li>
+                  <li>Métricas de conversão FAQ→Lead</li>
                 </ul>
               </div>
               <div className="mt-6 h-px bg-slate-200" />
@@ -490,10 +557,10 @@ export default function Home() {
                   <div className="text-xl font-bold">R$ 2.200,00/mês</div>
                 </div>
                 <ul className="mt-2 text-sm text-slate-700 space-y-1">
-                  <li>• Agente Orquestrador + SDR (Particular/Convênio)</li>
-                  <li>• Validação de convênios</li>
-                  <li>• Integração Omnichannel + CRM</li>
-                  <li>• Dashboard essencial</li>
+                  <li>Agente Orquestrador + SDR (Particular/Convênio)</li>
+                  <li>Validação de convênios</li>
+                  <li>Integração Omnichannel + CRM</li>
+                  <li>Dashboard essencial</li>
                 </ul>
               </div>
               <div className="mt-6 h-px bg-slate-200" />
@@ -512,10 +579,10 @@ export default function Home() {
                   <div className="text-lg font-semibold">R$ 1.000,00/mês</div>
                 </div>
                 <ul className="mt-2 text-sm text-slate-700 space-y-1">
-                  <li>• Confirmações D‑2/D‑1/D‑2h</li>
-                  <li>• Reagendamento inteligente + fila de espera</li>
-                  <li>• Follow‑up pós‑consulta</li>
-                  <li>• Integração com CRM + métricas de no‑show</li>
+                  <li>Confirmações D‑2/D‑1/D‑2h</li>
+                  <li>Reagendamento inteligente + fila de espera</li>
+                  <li>Follow‑up pós‑consulta</li>
+                  <li>Integração com CRM + métricas de no‑show</li>
                 </ul>
               </div>
               <div className="mt-6 h-px bg-slate-200" />
@@ -536,8 +603,8 @@ export default function Home() {
                 <div className="mt-3 text-sm text-slate-700">
                   <div className="font-semibold text-slate-800">Extras</div>
                   <ul className="mt-2 space-y-1">
-                    <li>• Treinamento (8h) e suporte 60 dias</li>
-                    <li>• Acompanhamento mensal (3 meses)</li>
+                    <li>Treinamento (8h) e suporte 60 dias</li>
+                    <li>Acompanhamento mensal (3 meses)</li>
                   </ul>
                 </div>
               </div>
@@ -551,16 +618,16 @@ export default function Home() {
                 <div className="text-sm">
                   <div className="font-semibold text-slate-800">Investimento Único</div>
                   <ul className="mt-1 space-y-1 text-slate-700">
-                    <li>• À vista (5% de desconto)</li>
-                    <li>• 5 parcelas de R$ 5.000</li>
-                    <li>• 3x sem juros (cartão corporativo)</li>
+                    <li>À vista (5% de desconto)</li>
+                    <li>5 parcelas de R$ 5.000</li>
+                    <li>3x sem juros (cartão corporativo)</li>
                   </ul>
                 </div>
                 <div className="text-sm">
                   <div className="font-semibold text-slate-800">Mensalidade</div>
                   <ul className="mt-1 space-y-1 text-slate-700">
-                    <li>• Inicia no mês seguinte ao go‑live</li>
-                    <li>• Faturamento via boleto ou PIX</li>
+                    <li>Inicia no mês seguinte ao go‑live</li>
+                    <li>Faturamento via boleto ou PIX</li>
                   </ul>
                 </div>
                 <div className="text-xs text-slate-600">Incluso: Infraestrutura, suporte (SLA 24h úteis), manutenção, segurança, backup e monitoramento 24/7.</div>
@@ -620,11 +687,11 @@ export default function Home() {
               <div className="font-bold text-rose-600">SEM VISIBILIDADE</div>
               <div className="mt-3 text-slate-700 text-sm">Antes de implementar a solução</div>
               <ul className="mt-3 space-y-1 text-slate-700 text-sm">
-                <li>• Conversão: 15%</li>
-                <li>• No‑show: 25%</li>
-                <li>• Consultas/mês: 675</li>
-                <li>• Leads perdidos: ~2.250/mês</li>
-                <li>• Receita mensal: R$ 270.000</li>
+                <li>Conversão: 15%</li>
+                <li>No‑show: 25%</li>
+                <li>Consultas/mês: 675</li>
+                <li>Leads perdidos: ~2.250/mês</li>
+                <li>Receita mensal: R$ 270.000</li>
               </ul>
               <div className="mt-3 text-slate-800 text-sm">Decisões: no achismo, reativas, pouca previsibilidade</div>
             </div>
@@ -632,11 +699,11 @@ export default function Home() {
               <div className="font-bold text-emerald-600">COM VISIBILIDADE TOTAL</div>
               <div className="mt-3 text-slate-700 text-sm">Depois de implantar IA + CRM + Dashboard</div>
               <ul className="mt-3 space-y-1 text-slate-700 text-sm">
-                <li>• Conversão: 39% (+160%)</li>
-                <li>• No‑show: 10% (−60%)</li>
-                <li>• Consultas/mês: 1.750 (+1.075)</li>
-                <li>• Leads perdidos: ~810/mês (−64%)</li>
-                <li>• Receita mensal: R$ 700.000 (+R$ 430.000)</li>
+                <li>Conversão: 39% (+160%)</li>
+                <li>No‑show: 10% (−60%)</li>
+                <li>Consultas/mês: 1.750 (+1.075)</li>
+                <li>Leads perdidos: ~810/mês (−64%)</li>
+                <li>Receita mensal: R$ 700.000 (+R$ 430.000)</li>
               </ul>
               <div className="mt-3 text-slate-800 text-sm">Decisões: baseadas em dados, proativas, com previsibilidade</div>
             </div>
@@ -652,15 +719,15 @@ export default function Home() {
         titleAlign="center"
         closeLabel="Voltar"
       >
-        <RoiModalContent />
+        <RoiModalLazy preparedFor={preparedFor} />
       </Modal>
 
       <Modal open={modal?.type === "crm"} onClose={() => setModal(null)} title="CRM Comercial">
-        <CRMModalContent />
+        <CRMModalLazy />
       </Modal>
 
       <Modal open={modal?.type === "dashboard"} onClose={() => setModal(null)} title="Dashboard">
-        <DashboardModalContent />
+        <DashboardModalLazy />
       </Modal>
 
       {/* Modal Fases do Projeto */}
@@ -670,24 +737,24 @@ export default function Home() {
         title={modal?.type === "phases" ? `Fase ${modal.phase}: Detalhamento` : "Fases do Projeto"}
         size="md"
       >
-        <PhaseDetailModalContent phase={modal?.type === "phases" ? modal.phase : 1} />
+        <PhaseDetailModalLazy phase={modal?.type === "phases" ? modal.phase : 1} />
       </Modal>
 
       {/* Modais da Seção Ganhos */}
       <Modal open={modal?.type === "conquistas"} onClose={() => setModal(null)} title="O Que Você Conquista">
-        <ConquistasModalContent />
+        <ConquistasModalLazy />
       </Modal>
 
       <Modal open={modal?.type === "inteligencia"} onClose={() => setModal(null)} title="Inteligência em Tempo Real">
-        <InteligenciaModalContent />
+        <InteligenciaModalLazy />
       </Modal>
 
       <Modal open={modal?.type === "insights"} onClose={() => setModal(null)} title="Exemplos de Insights Acionáveis">
-        <InsightsModalContent />
+        <InsightsModalLazy />
       </Modal>
 
       <Modal open={modal?.type === "relatorios"} onClose={() => setModal(null)} title="Relatórios Avançados com Cruzamento de Dados">
-        <RelatoriosModalContentDoc />
+        <RelatoriosModalLazy />
       </Modal>
 
       {/* Modais das Etapas */}
@@ -697,1289 +764,8 @@ export default function Home() {
         title={modal?.type === "etapa" ? `Etapa ${modal.etapa} - ${getEtapaTitle(modal.etapa)}` : "Etapa"}
         size="md"
       >
-        <EtapaModalContent etapa={modal?.type === "etapa" ? modal.etapa : 1} />
+        <EtapaModalLazy etapa={modal?.type === "etapa" ? modal.etapa : 1} />
       </Modal>
-    </div>
-  );
-}
-
-// Helper para obter o título da etapa
-function getEtapaTitle(etapa: 1 | 2 | 3 | 4): string {
-  const titles = {
-    1: "Recepção",
-    2: "Agente SDR",
-    3: "Triagem",
-    4: "Atendimento",
-  };
-  return titles[etapa];
-}
-
-// Componente de conteúdo dos modais das etapas
-function EtapaModalContent({ etapa }: { etapa: 1 | 2 | 3 | 4 }) {
-  type EtapaConfig = {
-    title: string;
-    intro: string;
-    bullets?: string[];
-    cards?: { title: string; bullets: string[] }[];
-    omnichannel?: { title: string; description: string };
-    footer?: string;
-  };
-
-  const etapaData: Record<1 | 2 | 3 | 4, EtapaConfig> = {
-    1: {
-      title: "Etapa 1 - Recepção",
-      intro: "Primeiro contato do paciente. O agente responde imediatamente, com tom humano e acolhedor.",
-      bullets: [
-        "Detecta se é primeira vez ou retorno",
-        "Identifica urgência na mensagem",
-        "Cria rapport com linguagem simples",
-      ],
-      omnichannel: {
-        title: "Canais omnichannel",
-        description: "Site, WhatsApp, Instagram, formulários e demais canais configurados convergem para uma fila única.",
-      },
-    },
-    2: {
-      title: "Etapa 2 — Agente SDR",
-      intro: "Qualificação inteligente com perguntas contextuais e sem menus engessados.",
-      bullets: [
-        "Identifica a necessidade (consulta ou exame)",
-        "Coleta: convênio ou particular",
-        "Adapta perguntas conforme respostas",
-        "Evita perguntas desnecessárias",
-      ],
-    },
-    3: {
-      title: "Etapa 3 — Triagem",
-      intro: "Encaminhamento para o subfunil correto com coleta mínima de dados.",
-      cards: [
-        {
-          title: "Convênio",
-          bullets: [
-            "Nome do convênio",
-            "Número da carteirinha e validade",
-            "Especialista desejado",
-          ],
-        },
-        {
-          title: "Particular",
-          bullets: [
-            "Nome completo, CPF e telefone",
-            "Especialista desejado",
-          ],
-        },
-      ],
-      footer: "Valida dados em tempo real e prepara o agendamento.",
-    },
-    4: {
-      title: "Etapa 4 — Atendimento",
-      intro: "Agendamento inteligente com consulta de agenda em tempo real.",
-      bullets: [
-        "Apresenta opções formatadas (data/horário)",
-        "Confirma a escolha e registra no sistema",
-        "Dispara confirmação e orientações",
-        "Automatiza lembretes e follow-up (reduz no-show)",
-      ],
-    },
-  };
-
-  const data = etapaData[etapa];
-
-  return (
-    <div className="p-4 md:p-6 space-y-6">
-      <div className="space-y-4">
-        <p className="text-slate-700 leading-relaxed">{data.intro}</p>
-
-        {etapa === 1 && (
-          <>
-            <ul className="space-y-2 text-slate-700">
-              {data.bullets?.map((bullet, idx) => (
-                <li key={idx} className="flex items-start gap-2">
-                  <span className="text-prime mt-1">•</span>
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-            {data.omnichannel && (
-              <div className="bg-prime-accent/5 rounded-lg border border-prime-accent/20 p-4 mt-6">
-                <h4 className="font-bold text-prime mb-2">{data.omnichannel.title}</h4>
-                <p className="text-slate-700 text-sm">{data.omnichannel.description}</p>
-              </div>
-            )}
-          </>
-        )}
-
-        {etapa === 2 && (
-          <ul className="space-y-2 text-slate-700">
-            {data.bullets?.map((bullet, idx) => (
-              <li key={idx} className="flex items-start gap-2">
-                <span className="text-prime mt-1">•</span>
-                <span>{bullet}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {etapa === 3 && (
-          <>
-            <div className="grid md:grid-cols-2 gap-4">
-              {data.cards?.map((card, idx) => (
-                <div key={idx} className="bg-white rounded-lg border border-slate-200 p-4">
-                  <h4 className="font-bold text-prime mb-3">{card.title}</h4>
-                  <ul className="space-y-2 text-slate-700">
-                    {card.bullets.map((bullet, bulletIdx) => (
-                      <li key={bulletIdx} className="flex items-start gap-2">
-                        <span className="text-prime mt-1">•</span>
-                        <span className="text-sm">{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            {data.footer && (
-              <p className="text-slate-700 text-sm mt-4">{data.footer}</p>
-            )}
-          </>
-        )}
-
-        {etapa === 4 && (
-          <ul className="space-y-2 text-slate-700">
-            {data.bullets?.map((bullet, idx) => (
-              <li key={idx} className="flex items-start gap-2">
-                <span className="text-prime mt-1">•</span>
-                <span>{bullet}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// Calculadora de ROI com dois cenários lado a lado
-function RoiModalContent() {
-  type FaturamentoInputs = {
-    leadsMes: number;
-    taxaConversaoAtual: number;
-    taxaConversaoNova: number;
-    ticketMedio: number;
-  };
-
-  type CustosInputs = {
-    funcionarios: number;
-    salario: number;
-    reducaoFuncionarios: number;
-  };
-
-  const investimento = 30000;
-  const currencyFormatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
-  const percentFormatter = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const formatCurrency = (value: number) => currencyFormatter.format(Number.isFinite(value) ? value : 0);
-  const formatPercent = (value: number) => `${percentFormatter.format(Number.isFinite(value) ? value : 0)}%`;
-
-  const defaultFaturamento: FaturamentoInputs = {
-    leadsMes: 4500,
-    taxaConversaoAtual: 15,
-    taxaConversaoNova: 32,
-    ticketMedio: 400,
-  };
-
-  const defaultCustos: CustosInputs = {
-    funcionarios: 7,
-    salario: 3500,
-    reducaoFuncionarios: 2,
-  };
-
-  const calculateFaturamento = (values: FaturamentoInputs) => {
-    const vendasAtuais = values.leadsMes * (values.taxaConversaoAtual / 100);
-    const vendasNovas = values.leadsMes * (values.taxaConversaoNova / 100);
-    const faturamentoAtual = vendasAtuais * values.ticketMedio;
-    const faturamentoNovo = vendasNovas * values.ticketMedio;
-    const aumentoMensal = faturamentoNovo - faturamentoAtual;
-    const aumentoAnual = aumentoMensal * 12;
-    const roi12 = ((aumentoAnual - investimento) / investimento) * 100;
-    return { aumentoMensal, aumentoAnual, roi12 };
-  };
-
-  const calculateCustos = (values: CustosInputs) => {
-    const custoAtualMensal = values.funcionarios * values.salario;
-    const funcionariosPosImplantacao = Math.max(values.funcionarios - values.reducaoFuncionarios, 0);
-    const custoNovoMensal = funcionariosPosImplantacao * values.salario;
-    const economiaMensal = custoAtualMensal - custoNovoMensal;
-    const economiaAnual = economiaMensal * 12;
-    const roi12 = ((economiaAnual - investimento) / investimento) * 100;
-    return { economiaMensal, economiaAnual, roi12 };
-  };
-
-  const [faturamentoInputs, setFaturamentoInputs] = useState<FaturamentoInputs>(defaultFaturamento);
-  const [faturamentoResultados, setFaturamentoResultados] = useState(() => calculateFaturamento(defaultFaturamento));
-  const [custosInputs, setCustosInputs] = useState<CustosInputs>(defaultCustos);
-  const [custosResultados, setCustosResultados] = useState(() => calculateCustos(defaultCustos));
-
-  const handleFaturamentoChange = (key: keyof FaturamentoInputs, value: number) => {
-    setFaturamentoInputs((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleCustosChange = (key: keyof CustosInputs, value: number) => {
-    setCustosInputs((prev) => ({ ...prev, [key]: value }));
-  };
-
-  return (
-    <div className="h-full bg-white">
-      <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-6">
-        <div className="text-center space-y-2">
-          <div className="text-xs uppercase tracking-wide text-emerald-700 font-semibold">Simulador interativo</div>
-          <h2 className="text-3xl md:text-4xl font-bold text-prime">Calculadora de ROI</h2>
-          <p className="text-slate-600 text-sm md:text-base max-w-3xl mx-auto">
-            Avalie rapidamente o ganho anual e o ROI em 12 meses considerando investimento fixo de R$ 30.000. Ajuste os campos e calcule cada cenário de forma independente.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 items-start">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Eficiência no Atendimento</p>
-              <h3 className="text-xl font-bold text-prime">ROI por aumento de faturamento</h3>
-              <p className="text-slate-600 text-sm mt-1">Projete a receita adicional com melhor conversão dos leads atuais.</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Leads por mês
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.leadsMes}
-                  onChange={(e) => handleFaturamentoChange("leadsMes", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Taxa de conversão atual (%)
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.taxaConversaoAtual}
-                  onChange={(e) => handleFaturamentoChange("taxaConversaoAtual", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Nova taxa de conversão (%)
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.taxaConversaoNova}
-                  onChange={(e) => handleFaturamentoChange("taxaConversaoNova", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Ticket médio (R$)
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.ticketMedio}
-                  onChange={(e) => handleFaturamentoChange("ticketMedio", Number(e.target.value))}
-                />
-              </label>
-            </div>
-            <button
-              className="btn-primary w-full justify-center"
-              onClick={() => setFaturamentoResultados(calculateFaturamento(faturamentoInputs))}
-            >
-              Calcular ROI – Faturamento
-            </button>
-            <div className="grid md:grid-cols-3 gap-3">
-              {[
-                { label: "Aumento Mensal de Faturamento", value: formatCurrency(faturamentoResultados.aumentoMensal) },
-                { label: "Aumento Anual de Faturamento", value: formatCurrency(faturamentoResultados.aumentoAnual) },
-                { label: "ROI em 12 meses", value: formatPercent(faturamentoResultados.roi12) },
-              ].map((item) => (
-                <div key={item.label} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                  <div className="text-xs uppercase tracking-wide text-slate-600 font-semibold">{item.label}</div>
-                  <div className="text-lg font-bold text-slate-900 mt-1">{item.value}</div>
-                </div>
-              ))}
-            </div>
-            <div className="text-xs text-slate-500">Investimento considerado: {formatCurrency(investimento)}</div>
-          </div>
-
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Redução de Custos</p>
-              <h3 className="text-xl font-bold text-prime">ROI por redução de quadro</h3>
-              <p className="text-slate-600 text-sm mt-1">Simule economia liberando FTEs com agentes de IA.</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Funcionários dedicados hoje
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={custosInputs.funcionarios}
-                  onChange={(e) => handleCustosChange("funcionarios", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Salário médio (R$)
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={custosInputs.salario}
-                  onChange={(e) => handleCustosChange("salario", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                FTEs liberados
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={custosInputs.reducaoFuncionarios}
-                  onChange={(e) => handleCustosChange("reducaoFuncionarios", Number(e.target.value))}
-                />
-              </label>
-            </div>
-            <button
-              className="btn-primary w-full justify-center"
-              onClick={() => setCustosResultados(calculateCustos(custosInputs))}
-            >
-              Calcular ROI – Equipe
-            </button>
-            <div className="grid md:grid-cols-3 gap-3">
-              {[
-                { label: "Economia Mensal", value: formatCurrency(custosResultados.economiaMensal) },
-                { label: "Economia Anual", value: formatCurrency(custosResultados.economiaAnual) },
-                { label: "ROI em 12 meses", value: formatPercent(custosResultados.roi12) },
-              ].map((item) => (
-                <div key={item.label} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                  <div className="text-xs uppercase tracking-wide text-slate-600 font-semibold">{item.label}</div>
-                  <div className="text-lg font-bold text-slate-900 mt-1">{item.value}</div>
-                </div>
-              ))}
-            </div>
-            <div className="text-xs text-slate-500">Investimento considerado: {formatCurrency(investimento)}</div>
-          </div>
-        </div>
-
-        <div className="text-center text-xs text-slate-500">
-          Resultados ilustrativos; ajuste os parâmetros conforme dados reais do {preparedFor}.
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// CRM renovado com menu lateral e 3 funis (estilo Kommo)
-function CRMModalContent() {
-  const [funil, setFunil] = useState<"principal" | "followup" | "agendados">("principal");
-  type Lead = { id: number; nome: string; especialidade: string; valor: number; origem?: string; tempo?: string; horario?: string; status?: string };
-
-  const pacientes = {
-    principal: {
-      novo: [
-        { id: 1, nome: "Maria Silva", especialidade: "Lesão LCA", valor: 450, origem: "WhatsApp", tempo: "2h" },
-        { id: 2, nome: "João Santos", especialidade: "Dor no Joelho", valor: 380, origem: "Instagram", tempo: "5h" },
-        { id: 3, nome: "Ana Costa", especialidade: "Menisco", valor: 320, origem: "Google", tempo: "1d" },
-      ],
-      qualificado: [
-        { id: 4, nome: "Pedro Oliveira", especialidade: "Artroplastia", valor: 3500, origem: "Indicação", tempo: "3h" },
-        { id: 5, nome: "Carla Mendes", especialidade: "Artrose", valor: 850, origem: "WhatsApp", tempo: "1d" },
-        { id: 6, nome: "Lucas Ferreira", especialidade: "Células‑Tronco", valor: 420, origem: "Facebook", tempo: "2d" },
-      ],
-      agendado: [
-        { id: 7, nome: "Beatriz Lima", especialidade: "Artroscopia", valor: 520, origem: "Instagram", tempo: "4h" },
-        { id: 8, nome: "Rafael Costa", especialidade: "Lesão LCA", valor: 680, origem: "WhatsApp", tempo: "1d" },
-      ],
-      confirmado: [
-        { id: 9, nome: "Julia Alves", especialidade: "Meniscectomia", valor: 390, origem: "Indicação", tempo: "6h" },
-        { id: 10, nome: "Marcos Rocha", especialidade: "Reconstrução LCA", valor: 2800, origem: "Google", tempo: "2d" },
-      ],
-    },
-    followup: {
-      aguardando: [
-        { id: 11, nome: "Fernanda Silva", especialidade: "Artrose", valor: 750, origem: "WhatsApp", tempo: "3d" },
-        { id: 12, nome: "Roberto Lima", especialidade: "Dor no Joelho", valor: 480, origem: "Instagram", tempo: "5d" },
-      ],
-      contatado: [
-        { id: 13, nome: "Camila Santos", especialidade: "Lesão Meniscal", valor: 420, origem: "Facebook", tempo: "1d" },
-        { id: 14, nome: "Diego Costa", especialidade: "Ruptura LCA", valor: 350, origem: "Google", tempo: "2d" },
-      ],
-      reengajado: [
-        { id: 15, nome: "Patricia Mendes", especialidade: "Artroplastia", valor: 3200, origem: "Indicação", tempo: "4d" },
-      ],
-      perdido: [
-        { id: 16, nome: "Gustavo Alves", especialidade: "Dor no Joelho", valor: 680, origem: "WhatsApp", tempo: "15d" },
-      ],
-    },
-    agendados: {
-      hoje: [
-        { id: 17, nome: "Amanda Rocha", especialidade: "Condromalácia", valor: 390, horario: "09:00", status: "Confirmado" },
-        { id: 18, nome: "Felipe Santos", especialidade: "Lesão LCA", valor: 520, horario: "10:30", status: "Confirmado" },
-        { id: 19, nome: "Isabela Costa", especialidade: "Artrose", valor: 450, horario: "14:00", status: "Pendente" },
-      ],
-      amanha: [
-        { id: 20, nome: "Thiago Lima", especialidade: "Artroplastia", valor: 2900, horario: "08:00", status: "Confirmado" },
-        { id: 21, nome: "Larissa Mendes", especialidade: "Menisco", valor: 420, horario: "11:00", status: "Confirmado" },
-      ],
-      semana: [
-        { id: 22, nome: "Bruno Oliveira", especialidade: "Revisão Pós‑op", valor: 680, horario: "Qua 15:00", status: "Confirmado" },
-        { id: 23, nome: "Natalia Silva", especialidade: "Condromalácia", valor: 350, horario: "Qui 09:30", status: "Pendente" },
-        { id: 24, nome: "Eduardo Costa", especialidade: "Dor no Joelho", valor: 480, horario: "Sex 16:00", status: "Confirmado" },
-      ],
-      reagendar: [
-        { id: 25, nome: "Vanessa Santos", especialidade: "Artrose", valor: 420, horario: "Cancelado", status: "Reagendar" },
-      ],
-    },
-  };
-
-  const colunas = {
-    principal: [
-      { key: "novo", label: "Novo", count: pacientes.principal.novo.length, color: "bg-sky-500" },
-      { key: "qualificado", label: "Qualificado", count: pacientes.principal.qualificado.length, color: "bg-indigo-500" },
-      { key: "agendado", label: "Agendado", count: pacientes.principal.agendado.length, color: "bg-emerald-500" },
-      { key: "confirmado", label: "Confirmado", count: pacientes.principal.confirmado.length, color: "bg-violet-500" },
-    ],
-    followup: [
-      { key: "aguardando", label: "Aguardando Follow-up", count: pacientes.followup.aguardando.length, color: "bg-amber-500" },
-      { key: "contatado", label: "Contatado", count: pacientes.followup.contatado.length, color: "bg-blue-500" },
-      { key: "reengajado", label: "Reengajado", count: pacientes.followup.reengajado.length, color: "bg-emerald-500" },
-      { key: "perdido", label: "Perdido", count: pacientes.followup.perdido.length, color: "bg-red-500" },
-    ],
-    agendados: [
-      { key: "hoje", label: "Hoje", count: pacientes.agendados.hoje.length, color: "bg-emerald-500" },
-      { key: "amanha", label: "Amanhã", count: pacientes.agendados.amanha.length, color: "bg-blue-500" },
-      { key: "semana", label: "Esta Semana", count: pacientes.agendados.semana.length, color: "bg-indigo-500" },
-      { key: "reagendar", label: "Reagendar", count: pacientes.agendados.reagendar.length, color: "bg-orange-500" },
-    ],
-  };
-
-  return (
-    <div className="h-full flex bg-white">
-      {/* Sidebar */}
-      <aside className="w-56 border-r border-slate-200 bg-slate-50 p-4">
-        <div className="font-bold text-slate-900 mb-4 text-lg">Funis</div>
-        <div className="space-y-2">
-          {[
-            { key: "principal", label: "Funil Principal", icon: "🎯" },
-            { key: "followup", label: "Follow-up", icon: "🔄" },
-            { key: "agendados", label: "Agendados", icon: "📅" },
-          ].map((item) => (
-            <button
-              key={item.key}
-              onClick={() => setFunil(item.key as "principal" | "followup" | "agendados")}
-              className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${
-                funil === item.key
-                  ? "bg-prime text-white shadow-md"
-                  : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              <span className="text-xl">{item.icon}</span>
-              <span className="text-sm">{item.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Stats */}
-        <div className="mt-8 space-y-3">
-          <div className="bg-white border border-slate-200 rounded-lg p-3">
-            <div className="text-xs font-medium text-slate-600 uppercase">Total Leads</div>
-            <div className="text-2xl font-bold text-prime mt-1">142</div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-3">
-            <div className="text-xs font-medium text-slate-600 uppercase">Taxa Conversão</div>
-            <div className="text-2xl font-bold text-emerald-600 mt-1">67,7%</div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-3">
-            <div className="text-xs font-medium text-slate-600 uppercase">Ticket Médio</div>
-            <div className="text-2xl font-bold text-slate-900 mt-1">R$ 768</div>
-          </div>
-        </div>
-      </aside>
-
-      {/* Kanban Area */}
-      <div className="flex-1 overflow-x-auto p-6">
-        <div className="flex gap-4 min-w-max">
-          {colunas[funil].map((coluna) => {
-            const leadsDaColuna: Lead[] = (pacientes as Record<string, Record<string, Lead[]>>)[funil][
-              coluna.key
-            ] ?? [];
-            return (
-              <div key={coluna.key} className="w-80 flex-shrink-0">
-                {/* Header da Coluna */}
-                <div className={`${coluna.color} text-white rounded-t-lg px-4 py-3 flex items-center justify-between`}>
-                  <span className="font-bold">{coluna.label}</span>
-                  <span className="bg-white/20 px-2 py-1 rounded text-sm font-semibold">{coluna.count}</span>
-                </div>
-
-                {/* Cards */}
-                <div className="bg-slate-50 border-x border-b border-slate-200 rounded-b-lg p-3 space-y-3 min-h-[400px]">
-                  {leadsDaColuna.map((lead: {id: number; nome: string; especialidade: string; valor: number; origem?: string; tempo?: string; horario?: string; status?: string}) => (
-                    <div key={lead.id} className="bg-white rounded-lg border border-slate-200 p-4 hover:shadow-md transition-shadow cursor-pointer">
-                      {/* Nome e Valor */}
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="font-semibold text-slate-900">{lead.nome}</div>
-                        <div className="text-sm font-bold text-emerald-600">R$ {lead.valor}</div>
-                      </div>
-
-                      {/* Especialidade */}
-                      <div className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs font-medium text-blue-700 mb-2">
-                        🏥 {lead.especialidade}
-                      </div>
-
-                      {/* Meta info */}
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-2">
-                        {lead.origem && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 rounded">
-                            📱 {lead.origem}
-                          </span>
-                        )}
-                        {lead.tempo && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 rounded">
-                            ⏱️ {lead.tempo}
-                          </span>
-                        )}
-                        {lead.horario && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 rounded">
-                            🕐 {lead.horario}
-                          </span>
-                        )}
-                        {lead.status && (
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-semibold ${
-                            lead.status === "Confirmado" ? "bg-emerald-100 text-emerald-700" :
-                            lead.status === "Pendente" ? "bg-amber-100 text-amber-700" :
-                            "bg-orange-100 text-orange-700"
-                          }`}>
-                            {lead.status}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Add Button */}
-                  <button className="w-full py-2 px-4 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 hover:border-prime hover:text-prime transition-colors font-medium text-sm">
-                    + Adicionar Lead
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Dashboard modal content renovado (estilo ilp-oficial)
-function DashboardModalContent() {
-  const [tab, setTab] = useState<"overview" | "funil" | "agendamentos" | "insights">("overview");
-
-  return (
-    <div className="h-full flex flex-col bg-white">
-      {/* Top Navigation Tabs */}
-      <div className="border-b border-slate-200 bg-slate-50 px-6 py-3">
-        <div className="flex gap-2 overflow-x-auto">
-          {[
-            { k: "overview", t: "Visão Geral" },
-            { k: "funil", t: "Funil" },
-            { k: "agendamentos", t: "Agendamentos" },
-            { k: "insights", t: "Insights" },
-          ].map((i) => (
-            <button
-              key={i.k}
-              onClick={() => setTab(i.k as "overview" | "funil" | "agendamentos" | "insights")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                tab === i.k
-                  ? "bg-prime text-white"
-                  : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              {i.t}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-auto p-6">
-        {tab === "overview" && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: "Leads/dia", value: "150", change: "+24%", type: "positive" },
-                { label: "Conversão", value: "39%", change: "+160%", type: "positive" },
-                { label: "No-show", value: "10%", change: "-60%", type: "positive" },
-                { label: "Consultas/mês", value: "1.750", change: "+42%", type: "positive" },
-                { label: "Receita", value: "R$ 700k", change: "+42%", type: "positive" },
-                { label: "Pipeline", value: "R$ 1,305M", change: "novo", type: "positive" },
-                { label: "Qualificação", value: "60%", change: "estável", type: "positive" },
-                { label: "Show Rate", value: "90%", change: "+7%", type: "positive" },
-              ].map((kpi) => (
-                <div key={kpi.label} className="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="text-xs font-medium text-slate-600 uppercase tracking-wide">{kpi.label}</div>
-                  <div className="mt-2 text-2xl font-bold text-slate-900">{kpi.value}</div>
-                  <div className={`mt-1 text-sm font-semibold ${kpi.type === 'positive' ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {kpi.change} vs mês anterior
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Distribuições principais */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Distribuição: Particular vs Convênio</h3>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="font-semibold text-slate-700">Particular</div>
-                      <div className="text-slate-600">58% • 2.610</div>
-                    </div>
-                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden mt-2">
-                      <div className="h-full bg-prime-accent" style={{ width: "58%" }} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="font-semibold text-slate-700">Convênio</div>
-                      <div className="text-slate-600">42% • 1.890</div>
-                    </div>
-                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden mt-2">
-                      <div className="h-full bg-prime" style={{ width: "42%" }} />
-                    </div>
-                  </div>
-                  <div className="text-xs text-slate-500 mt-2">Base: 4.500 leads/mês (estimativa)</div>
-                </div>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Procedimentos Mais Procurados</h3>
-                <div className="space-y-3">
-                  {[
-                    { nome: "Artroscopia", pct: 38, leads: 1710 },
-                    { nome: "Tratamento Artrose", pct: 32, leads: 1440 },
-                    { nome: "Artroplastia", pct: 18, leads: 810 },
-                    { nome: "Células-Tronco", pct: 12, leads: 540 },
-                  ].map((p) => (
-                    <div key={p.nome}>
-                      <div className="flex items-center justify-between text-sm">
-                        <div className="font-semibold text-slate-700">{p.nome}</div>
-                        <div className="text-slate-600">{p.pct}% • {p.leads}</div>
-                      </div>
-                      <div className="h-3 bg-slate-100 rounded-full overflow-hidden mt-2">
-                        <div className="h-full bg-prime" style={{ width: `${p.pct}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="text-xs text-slate-500">Números ilustrativos extraídos do documento de arquitetura. Ajustar com dados reais do período.</div>
-          </div>
-        )}
-
-        {/* Aba "canais" removida nesta proposta */}
-
-        {tab === "funil" && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                { label: "Leads/mês", value: "4.500" },
-                { label: "Qualificados", value: "60%" },
-                { label: "Agendados", value: "~2.100" },
-                { label: "Confirmados", value: "~1.940" },
-                { label: "Realizados", value: "1.750" },
-                { label: "No-show", value: "10%" },
-              ].map((kpi) => (
-                <div key={kpi.label} className="bg-white border border-slate-200 rounded-lg p-4">
-                  <div className="text-xs font-medium text-slate-600 uppercase tracking-wide">{kpi.label}</div>
-                  <div className="mt-2 text-2xl font-bold text-prime">{kpi.value}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Funil Visual */}
-            <div className="bg-white border border-slate-200 rounded-lg p-6">
-              <h3 className="text-lg font-bold text-slate-900 mb-6">Funil de Conversão Completo</h3>
-              <div className="space-y-4">
-                {[
-                  { etapa: "Leads", valor: 4500, percentual: 100, cor: "bg-blue-600" },
-                  { etapa: "Qualificados", valor: 2700, percentual: 60, cor: "bg-indigo-600" },
-                  { etapa: "Agendados", valor: 2100, percentual: 46.7, cor: "bg-violet-600" },
-                  { etapa: "Confirmados", valor: 1940, percentual: 43.1, cor: "bg-purple-600" },
-                  { etapa: "Realizados", valor: 1750, percentual: 38.9, cor: "bg-fuchsia-600" },
-                ].map((item, idx) => (
-                  <div key={idx} className="relative">
-                    <div className="flex items-center gap-4">
-                      <div className="w-32 text-sm font-medium text-slate-700">{item.etapa}</div>
-                      <div className="flex-1">
-                        <div className="h-10 bg-slate-100 rounded-lg overflow-hidden relative">
-                          <div
-                            className={`h-full ${item.cor} transition-all duration-500 flex items-center justify-between px-4`}
-                            style={{ width: `${item.percentual}%` }}
-                          >
-                            <span className="text-white font-bold text-sm">{item.valor.toLocaleString()}</span>
-                            <span className="text-white font-bold text-sm">{item.percentual.toFixed(1)}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {idx < 4 && (
-                      <div className="ml-32 pl-4 mt-1 text-xs text-slate-500">
-                        ↓ Perda: {((1 - item.percentual / 100) * 100).toFixed(1)}%
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {tab === "agendamentos" && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: "Realizados (mês)", value: "1.750", status: "positive" },
-                { label: "No-show", value: "10%", status: "positive" },
-                { label: "Show Rate", value: "90%", status: "positive" },
-                { label: "Pipeline", value: "R$ 1,305M", status: "positive" },
-              ].map((kpi) => (
-                <div key={kpi.label} className="bg-white border border-slate-200 rounded-lg p-4">
-                  <div className="text-xs font-medium text-slate-600 uppercase tracking-wide">{kpi.label}</div>
-                  <div className="mt-2 text-2xl font-bold text-slate-900">{kpi.value}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Distribuição Particular/Convênio e Top Convênios */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Particular vs Convênio</h3>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="font-semibold text-slate-700">Particular</div>
-                      <div className="text-slate-600">58% • 2.610</div>
-                    </div>
-                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden mt-2">
-                      <div className="h-full bg-prime-accent" style={{ width: "58%" }} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="font-semibold text-slate-700">Convênio</div>
-                      <div className="text-slate-600">42% • 1.890</div>
-                    </div>
-                    <div className="h-3 bg-slate-100 rounded-full overflow-hidden mt-2">
-                      <div className="h-full bg-prime" style={{ width: "42%" }} />
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <div className="text-sm font-semibold text-slate-800 mb-2">Top 3 Convênios</div>
-                  <ul className="text-sm text-slate-700 space-y-1">
-                    <li>1. Unimed — 820 leads</li>
-                    <li>2. Bradesco — 567 leads</li>
-                    <li>3. Servir — 378 leads</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Procedimentos Mais Procurados</h3>
-                <div className="space-y-3">
-                  {[
-                    { nome: "Artroscopia", pct: 38, leads: 1710 },
-                    { nome: "Tratamento Artrose", pct: 32, leads: 1440 },
-                    { nome: "Artroplastia", pct: 18, leads: 810 },
-                    { nome: "Células-Tronco", pct: 12, leads: 540 },
-                  ].map((p, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                      <div>
-                        <div className="font-semibold text-slate-900">{p.nome}</div>
-                        <div className="text-sm text-slate-600">{p.leads} leads</div>
-                      </div>
-                      <div className="w-28">
-                        <div className="h-2 bg-slate-200 rounded">
-                          <div className="h-2 bg-prime rounded" style={{ width: `${p.pct}%` }} />
-                        </div>
-                      </div>
-                      <div className="font-bold text-slate-700">{p.pct}%</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="text-xs text-slate-500">Números ilustrativos do documento de arquitetura; ajustar quando integrar aos dados reais.</div>
-          </div>
-        )}
-
-        {tab === "insights" && (
-          <div className="space-y-6">
-            {/* Alert Box */}
-            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-orange-500 p-6 rounded-lg">
-              <div className="flex items-start gap-3">
-                <div className="text-3xl">⚠️</div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-orange-900 text-lg mb-2">Atenção: Oportunidade Crítica</h4>
-                  <p className="text-slate-700 mb-3">Ortopedia tem 47 pacientes em fila de espera e 12 horários vagos na próxima semana. Potencial de <span className="font-bold text-orange-700">+R$ 5.640</span> em receita.</p>
-                  <button className="px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors">
-                    Disparar Campanha Agora
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Insights Grid */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="text-2xl">📊</div>
-                  <h4 className="font-bold text-slate-900">Padrão de Conversão</h4>
-                </div>
-                <p className="text-sm text-slate-700 mb-4">
-                  35% dos leads chegam no domingo com conversão de apenas 28% (vs 48% na segunda-feira). Causa: demora na resposta.
-                </p>
-                <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-lg">
-                  <div className="font-semibold text-emerald-900 text-sm">💡 Ação Sugerida:</div>
-                  <p className="text-sm text-emerald-800 mt-1">Ativar bot com senso de urgência nos fins de semana</p>
-                  <div className="text-emerald-700 font-bold mt-2">Ganho potencial: +R$ 25.200/mês</div>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="text-2xl">💎</div>
-                  <h4 className="font-bold text-slate-900">Objeção Principal</h4>
-                </div>
-                <p className="text-sm text-slate-700 mb-4">
-                  79% dos leads de cirurgia que não convertem mencionam &quot;preço alto&quot;. Taxa de conversão: apenas 22%.
-                </p>
-                <div className="bg-sky-50 border border-sky-200 p-3 rounded-lg">
-                  <div className="font-semibold text-sky-900 text-sm">💡 Ação Sugerida:</div>
-                  <p className="text-sm text-sky-800 mt-1">Oferecer parcelamento 6x antes da objeção</p>
-                  <div className="text-sky-700 font-bold mt-2">Ganho potencial: +R$ 18.000/mês</div>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="text-2xl">🎯</div>
-                  <h4 className="font-bold text-slate-900">Melhor Canal</h4>
-                </div>
-                <p className="text-sm text-slate-700 mb-4">
-                  Indicações têm 94% de conversão, 4% de no-show e LTV de R$ 3.980 (melhor canal). Atualmente: apenas 13% dos leads.
-                </p>
-                <div className="bg-purple-50 border border-purple-200 p-3 rounded-lg">
-                  <div className="font-semibold text-purple-900 text-sm">💡 Ação Sugerida:</div>
-                  <p className="text-sm text-purple-800 mt-1">Criar programa de indicação com R$ 200 de incentivo</p>
-                  <div className="text-purple-700 font-bold mt-2">Meta: Dobrar indicações = +R$ 196k/mês</div>
-                </div>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="text-2xl">✅</div>
-                  <h4 className="font-bold text-slate-900">Tendência Positiva</h4>
-                </div>
-                <p className="text-sm text-slate-700 mb-4">
-                  Lesões do Joelho aumentaram conversão em 18% (35% → 53%). Motivo: resposta mais rápida no WhatsApp.
-                </p>
-                <div className="bg-teal-50 border border-teal-200 p-3 rounded-lg">
-                  <div className="font-semibold text-teal-900 text-sm">💡 Ação Sugerida:</div>
-                  <p className="text-sm text-teal-800 mt-1">Replicar estratégia em outras especialidades</p>
-                  <div className="text-teal-700 font-bold mt-2">Continue fazendo!</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// Componente para os detalhes das fases
-function PhaseDetailModalContent({ phase }: { phase: 1 | 2 | 3 | 4 }) {
-  const phaseData = {
-    1: {
-      title: "Fase 1: Imersão e Arquitetura",
-      items: [
-        { title: "Workshop de Imersão", description: "Mapeamento de processos atuais, objeções reais dos pacientes e definição de stakeholders." },
-        { title: "Desenho de Fluxos Conversacionais", description: "Fluxograma completo de cada agente (SDR, FAQ, No‑Show) e árvore de decisões." },
-        { title: "Arquitetura Técnica de Agentes", description: "Definição da stack, integrações, segurança/LGPD e diagrama de arquitetura." },
-        { title: "Prototipagem e Validação", description: "Mockups de conversas-chave e ajustes com base no feedback da equipe." }
-      ]
-    },
-    2: {
-      title: "Fase 2: Desenvolvimento dos Agentes",
-      items: [
-        { title: "Agente Orquestrador + SDR", description: "Qualificação automatizada (particular/convênio), validação de convênios e proposta de horários." },
-        { title: "Agente FAQ Educacional", description: "Base de conhecimento (procedimentos, recuperação, valores/convênios, sobre o médico, localização)." },
-        { title: "Agente Anti No‑Show", description: "Confirmações D‑2/D‑1/D‑2h, reagendamento e fila de espera." },
-        { title: "Teste Guiado (Human‑in‑the‑loop)", description: "Validação ponta a ponta com escala para humano quando necessário." }
-      ]
-    },
-    3: {
-      title: "Fase 3: Integrações e Painéis",
-      items: [
-        { title: "Agenda Unificada", description: "Integração Hospital IOP (Tasy) + agenda particular; prevenção de conflitos e sobreposições." },
-        { title: "CRM Comercial", description: "Funis, estágios, tags por especialidade/origem e histórico completo de conversas." },
-        { title: "Dashboard Executivo", description: "KPIs, funil completo, previsões de no‑show e relatórios executivos." },
-        { title: "Relatórios", description: "Mês atual, pipeline, crescimento vs mês anterior." }
-      ]
-    },
-    4: {
-      title: "Fase 4: Go‑Live e Estabilização",
-      items: [
-        { title: "Go‑Live", description: "Deploy em produção com checklist final, backup e plano de rollback." },
-        { title: "Monitoramento 24/7", description: "Acompanhamento de conversas, correção de fluxos e melhoria contínua." },
-        { title: "Otimização de Conversões", description: "Ajustes de prompts e respostas FAQ com base em métricas reais." },
-        { title: "Treinamento e Handover", description: "Documentação final, playbook e treinamento avançado da equipe." }
-      ]
-    }
-  };
-
-  const data = phaseData[phase];
-
-  return (
-    <div className="p-4 md:p-6 space-y-4">
-      {data.items.map((item, idx) => (
-        <div key={idx} className="bg-slate-50 p-5 rounded-lg border border-slate-200">
-          <h4 className="font-bold text-lg text-prime-dark mb-2">{item.title}</h4>
-          <p className="text-slate-700 leading-relaxed">{item.description}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Componentes dos modais da seção Ganhos
-function ConquistasModalContent() {
-  return (
-    <div className="p-4 md:p-6 space-y-6">
-      <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-lg">
-        <h3 className="text-2xl font-bold text-emerald-900 mb-4">Ganhos Operacionais</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-emerald-700 mb-2">🕘 Atendimento 24/7</div>
-            <div className="text-sm text-slate-700">Leads fora do horário recebem resposta imediata e são encaminhados</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-emerald-700 mb-2">🤖 Automação de tarefas</div>
-            <div className="text-sm text-slate-700">Qualificação, dúvidas frequentes e confirmações automatizadas</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-emerald-700 mb-2">📅 Agenda Unificada</div>
-            <div className="text-sm text-slate-700">IOP (Tasy) + particular — menos conflitos e sobreposições</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-emerald-700 mb-2">🔔 Confirmações e Reagendamentos</div>
-            <div className="text-sm text-slate-700">Lembretes D‑1 e D‑2h; fila de espera para vagas liberadas</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg md:col-span-2">
-            <div className="font-bold text-emerald-700 mb-2">🔄 Follow‑up e Continuidade</div>
-            <div className="text-sm text-slate-700">Retornos, exames e pós‑procedimento sob controle</div>
-          </div>
-        </div>
-        <div className="text-xs text-slate-600 mt-4">Observação: resultados variam conforme mix de casos, volume e agenda disponível.</div>
-      </div>
-    </div>
-  );
-}
-
-function InteligenciaModalContent() {
-  return (
-    <div className="p-4 md:p-6 space-y-6">
-      <div className="bg-sky-50 border border-sky-200 p-6 rounded-lg">
-        <h3 className="text-2xl font-bold text-sky-900 mb-4">🧠 Inteligência Completa em Tempo Real</h3>
-
-        <div className="space-y-4">
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-sky-700 mb-2">📊 Métricas Operacionais</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• Taxa de conversão de leads (geral e por canal)</li>
-              <li>• Horários com maior demanda por especialidade</li>
-              <li>• Taxa de no-show por dia da semana e horário</li>
-              <li>• Tempo médio de resposta aos leads</li>
-              <li>• Taxa de ocupação da agenda</li>
-            </ul>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-sky-700 mb-2">🎯 Inteligência Comercial</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• Especialidades mais procuradas vs. mais lucrativas</li>
-              <li>• Principais objeções dos pacientes por tipo de serviço</li>
-              <li>• Ticket médio por canal de origem</li>
-              <li>• Oportunidades comerciais não aproveitadas</li>
-              <li>• Perfil de pacientes de alto valor (LTV)</li>
-            </ul>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-sky-700 mb-2">⚠️ Análise Preditiva</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• Previsão de no-show por paciente (score de risco)</li>
-              <li>• Leads com maior probabilidade de conversão</li>
-              <li>• Tendências de demanda por especialidade</li>
-              <li>• Períodos de baixa conversão esperada</li>
-              <li>• Projeção de receita mensal</li>
-            </ul>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg">
-            <div className="font-bold text-sky-700 mb-2">💰 ROI e Performance</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• ROI em tempo real de cada canal de aquisição</li>
-              <li>• CAC (Custo de Aquisição de Cliente) por origem</li>
-              <li>• LTV (Lifetime Value) por perfil de paciente</li>
-              <li>• Performance dos agentes de IA (taxa de resolução)</li>
-              <li>• Economia gerada vs. operação manual</li>
-            </ul>
-          </div>
-
-          <div className="bg-gradient-to-r from-sky-100 to-emerald-100 p-4 rounded-lg border-2 border-sky-300">
-            <div className="font-bold text-sky-900 text-lg mb-2">✨ Exemplo Prático</div>
-            <div className="text-slate-800 text-sm space-y-2">
-              <p><strong>Segunda-feira, 9h:</strong> Dashboard mostra que você teve 23 leads no fim de semana, com taxa de conversão de apenas 28% (abaixo da média de 45%).</p>
-              <p><strong>Diagnóstico automático:</strong> Leads de fim de semana esfriam porque resposta demora. Sistema sugere: ativar bot para resposta imediata 24/7.</p>
-              <p><strong>Ação tomada:</strong> Bot ativado. Semana seguinte, conversão de leads de fim de semana sobe para 42%.</p>
-              <p className="text-emerald-700 font-bold">💰 Resultado: +R$ 6.300 em uma semana.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function InsightsModalContent() {
-  return (
-    <div className="p-4 md:p-6 space-y-6 max-h-[70vh] overflow-auto">
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 p-6 rounded-lg">
-        <h3 className="text-2xl font-bold text-purple-900 mb-4">Insights notificados via WhatsApp</h3>
-
-        {/* Alerta Crítico 1 */}
-        <div className="bg-white border-l-4 border-red-500 p-4 rounded-lg mb-4">
-          <div className="flex items-start gap-3">
-            <span className="text-3xl">⚠️</span>
-            <div className="flex-1">
-              <div className="font-bold text-red-700 mb-2">ALERTA 1: No-Show em Alta</div>
-              <div className="space-y-2 text-sm text-slate-700">
-                <div><strong>O QUE:</strong> Taxa de no-show terça-feira subiu para 38% (média: 23%)</div>
-                <div><strong>POR QUE:</strong> 87% das faltas são entre 14h-17h. Pacientes confirmam mas esquecem.</div>
-                <div className="text-red-600 font-semibold">💸 IMPACTO: -R$ 12.400 essa semana</div>
-                <div className="bg-emerald-50 border border-emerald-200 p-3 rounded mt-2">
-                  <div className="font-semibold text-emerald-800 mb-1">✅ AÇÃO SUGERIDA:</div>
-                  <ul className="text-slate-700 space-y-1">
-                    <li>• Adicionar lembrete EXTRA 2h antes (terças 14-17h)</li>
-                    <li>• Ligar para confirmar pacientes de alto valor</li>
-                    <li>• Testar reagendamento de terça para outro dia</li>
-                  </ul>
-                  <div className="text-emerald-700 font-bold mt-2">📈 RESULTADO ESPERADO: Reduzir no-show em 50% = +R$ 6.200/semana</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Oportunidade 1 */}
-        <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-lg mb-4">
-          <div className="flex items-start gap-3">
-            <span className="text-3xl">💎</span>
-            <div className="flex-1">
-              <div className="font-bold text-emerald-700 mb-2">OPORTUNIDADE 1: Demanda Reprimida</div>
-              <div className="space-y-2 text-sm text-slate-700">
-                <div><strong>O QUE:</strong> 47 pessoas na fila de espera para Ortopedia. Dra. Santos tem 12 horários vagos próxima semana.</div>
-                <div><strong>POR QUE:</strong> Pacientes não sabem da disponibilidade. Recepção não liga para todos.</div>
-                <div className="text-emerald-600 font-semibold">💰 OPORTUNIDADE: +R$ 5.640 em 1 semana</div>
-                <div className="bg-sky-50 border border-sky-200 p-3 rounded mt-2">
-                  <div className="font-semibold text-sky-800 mb-1">✅ AÇÃO SUGERIDA:</div>
-                  <ul className="text-slate-700 space-y-1">
-                    <li>• Disparar mensagem automática para fila</li>
-                    <li>• Priorizar top 20 por ordem de espera</li>
-                    <li>• Oferecer 2-3 opções de horário</li>
-                  </ul>
-                  <div className="text-sky-700 font-bold mt-2">📈 RESULTADO ESPERADO: Preencher 80% das vagas = +R$ 4.512 capturados</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Insight Estratégico 1 */}
-        <div className="bg-white border-l-4 border-blue-500 p-4 rounded-lg mb-4">
-          <div className="flex items-start gap-3">
-            <span className="text-3xl">📊</span>
-            <div className="flex-1">
-              <div className="font-bold text-blue-700 mb-2">INSIGHT 1: Padrão de Conversão</div>
-              <div className="space-y-2 text-sm text-slate-700">
-                <div><strong>DESCOBERTA:</strong></div>
-                <ul className="space-y-1">
-                  <li>• 35% dos leads chegam no DOMINGO (maior volume)</li>
-                  <li>• Taxa de conversão domingo: 28%</li>
-                  <li>• Taxa de conversão segunda: 48%</li>
-                  <li>• Diferença: -20 pontos percentuais</li>
-                </ul>
-                <div className="mt-2"><strong>CAUSA RAIZ:</strong></div>
-                <ul className="space-y-1">
-                  <li>• Domingo: bot responde, mas sem urgência</li>
-                  <li>• Segunda 9h: lead já esfriou, não responde mais</li>
-                </ul>
-                <div className="text-red-600 font-semibold mt-2">💸 PERDA ATUAL: 52 leads/mês × R$ 450 = -R$ 23.400/mês</div>
-                <div className="bg-purple-50 border border-purple-200 p-3 rounded mt-2">
-                  <div className="font-semibold text-purple-800 mb-1">✅ SOLUÇÃO:</div>
-                  <ol className="text-slate-700 space-y-1 list-decimal pl-5">
-                    <li>Bot criar senso de urgência (&quot;só 3 vagas essa semana&quot;)</li>
-                    <li>Oferecer agendamento imediato (não &quot;ligo segunda&quot;)</li>
-                    <li>Disparo automático segunda 8h se não agendou</li>
-                  </ol>
-                  <div className="text-purple-700 font-bold mt-2">📈 META: Elevar conversão domingo de 28% → 42% = +R$ 25.200/mês</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Insight Estratégico 2 */}
-        <div className="bg-white border-l-4 border-orange-500 p-4 rounded-lg mb-4">
-          <div className="flex items-start gap-3">
-            <span className="text-3xl">🎯</span>
-            <div className="flex-1">
-              <div className="font-bold text-orange-700 mb-2">INSIGHT 2: Objeção Principal</div>
-              <div className="space-y-2 text-sm text-slate-700">
-                <div><strong>DESCOBERTA:</strong></div>
-                <ul className="space-y-1">
-                  <li>• 18 pedidos de orçamento cirurgia de varizes</li>
-                  <li>• Só 4 fecharam (22% de conversão)</li>
-                  <li>• 14 não responderam mais</li>
-                </ul>
-                <div className="mt-2"><strong>ANÁLISE DE CONVERSAS:</strong></div>
-                <ul className="space-y-1">
-                  <li>• 11 dos 14 mencionaram &quot;preço alto&quot; (79%)</li>
-                  <li>• 3 não entenderam o que estava incluso no valor</li>
-                </ul>
-                <div className="text-red-600 font-semibold mt-2">💸 PERDA: 14 cirurgias × R$ 4.500 = -R$ 63.000 esse mês</div>
-                <div className="bg-amber-50 border border-amber-200 p-3 rounded mt-2">
-                  <div className="font-semibold text-amber-800 mb-1">✅ SOLUÇÃO:</div>
-                  <ol className="text-slate-700 space-y-1 list-decimal pl-5">
-                    <li>Bot explicar TUDO incluso no valor (transparência)</li>
-                    <li>Mostrar parcelamento em 6x ANTES da objeção</li>
-                    <li>Enviar cases de sucesso + depoimentos automaticamente</li>
-                    <li>Oferecer consulta gratuita para tirar dúvidas</li>
-                  </ol>
-                  <div className="text-amber-700 font-bold mt-2">📈 META: Elevar conversão de 22% → 45% = +R$ 18.000/mês</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tendência Positiva */}
-        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-300 p-5 rounded-lg">
-          <div className="font-bold text-emerald-800 mb-3">✅ TENDÊNCIAS POSITIVAS (Continue Fazendo)</div>
-          <div className="space-y-3 text-sm">
-            <div className="bg-white p-3 rounded">
-              <div className="font-semibold text-emerald-700">Lesão do LCA: Conversão subiu 18% (35% → 53%)</div>
-              <div className="text-slate-700 mt-1">→ Motivo: resposta mais rápida no WhatsApp</div>
-              <div className="text-emerald-600 font-semibold">→ Replicar: instruir equipe a priorizar esses casos</div>
-            </div>
-
-            <div className="bg-white p-3 rounded">
-              <div className="font-semibold text-emerald-700">Artroscopia: Zero no‑show essa semana</div>
-              <div className="text-slate-700 mt-1">→ Motivo: lembrete D‑2/D‑1/D‑2h funcionando</div>
-              <div className="text-emerald-600 font-semibold">→ Avaliar: manter e testar horário do lembrete</div>
-            </div>
-
-            <div className="bg-white p-3 rounded">
-              <div className="font-semibold text-emerald-700">Artrose: 12 marcações no período (recorde)</div>
-              <div className="text-slate-700 mt-1">→ Motivo: conteúdo educacional sobre tratamento conservador</div>
-              <div className="text-emerald-600 font-semibold">→ Ação: replicar pauta para Artroplastia</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Resumo Financeiro */}
-          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-300 p-5 rounded-lg mt-4">
-          <div className="font-bold text-indigo-900 mb-3">💰 RESUMO FINANCEIRO DA SEMANA</div>
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-slate-700">Oportunidades identificadas:</span>
-              <span className="text-2xl font-bold text-indigo-700">+R$ 47.712</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-700">Ações implementadas:</span>
-              <span className="text-xl font-bold text-emerald-600">+R$ 18.300 (38%)</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-700">Ainda em aberto:</span>
-              <span className="text-xl font-bold text-orange-600">+R$ 29.412 (62%)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Versão alinhada ao documento de arquitetura: métricas-chave, pipeline e crescimento
-function RelatoriosModalContentDoc() {
-  return (
-    <div className="p-4 md:p-6 space-y-6 max-h-[70vh] overflow-auto">
-      <div className="bg-white border border-slate-200 p-6 rounded-lg">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Mês Atual (Outubro)</h3>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
-            <div className="text-sm text-slate-600">Consultas realizadas</div>
-            <div className="text-2xl font-bold text-slate-900">1.750</div>
-          </div>
-          <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
-            <div className="text-sm text-slate-600">Ticket médio</div>
-            <div className="text-2xl font-bold text-slate-900">R$ 400</div>
-          </div>
-          <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
-            <div className="text-sm text-slate-600">Receita total</div>
-            <div className="text-2xl font-bold text-slate-900">R$ 700.000</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white border border-slate-200 p-6 rounded-lg">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Pipeline (Em Negociação)</h3>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
-            <div className="text-sm text-emerald-700">Cirurgias em análise</div>
-            <div className="text-2xl font-bold text-emerald-900">87</div>
-          </div>
-          <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
-            <div className="text-sm text-emerald-700">Valor médio</div>
-            <div className="text-2xl font-bold text-emerald-900">R$ 15.000</div>
-          </div>
-          <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
-            <div className="text-sm text-emerald-700">Valor potencial</div>
-            <div className="text-2xl font-bold text-emerald-900">R$ 1.305.000</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white border border-slate-200 p-6 rounded-lg">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Crescimento</h3>
-        <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg">
-          <div className="text-sm text-amber-700">Crescimento vs mês anterior</div>
-          <div className="text-2xl font-bold text-amber-900">+42%</div>
-        </div>
-      </div>
-
-      <div className="text-xs text-slate-500">Números ilustrativos do documento de arquitetura; ajustar com dados reais quando integrado.</div>
     </div>
   );
 }
