@@ -9,45 +9,45 @@ export default function InteligenciaModalContent() {
         <div className="space-y-4">
           <div className="bg-white p-4 rounded-lg">
             <div className="font-bold text-sky-700 mb-2">📊 Métricas Operacionais</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• Taxa de conversão de leads (geral e por canal)</li>
-              <li>• Horários com maior demanda por especialidade</li>
-              <li>• Taxa de no-show por dia da semana e horário</li>
-              <li>• Tempo médio de resposta aos leads</li>
-              <li>• Taxa de ocupação da agenda</li>
+            <ul className="space-y-1 text-slate-700 list-disc list-inside pl-1">
+              <li>Taxa de conversão de leads (geral e por canal)</li>
+              <li>Horários com maior demanda por especialidade</li>
+              <li>Taxa de no-show por dia da semana e horário</li>
+              <li>Tempo médio de resposta aos leads</li>
+              <li>Taxa de ocupação da agenda</li>
             </ul>
           </div>
 
           <div className="bg-white p-4 rounded-lg">
             <div className="font-bold text-sky-700 mb-2">🎯 Inteligência Comercial</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• Especialidades mais procuradas vs. mais lucrativas</li>
-              <li>• Principais objeções dos pacientes por tipo de serviço</li>
-              <li>• Ticket médio por canal de origem</li>
-              <li>• Oportunidades comerciais não aproveitadas</li>
-              <li>• Perfil de pacientes de alto valor (LTV)</li>
+            <ul className="space-y-1 text-slate-700 list-disc list-inside pl-1">
+              <li>Especialidades mais procuradas vs. mais lucrativas</li>
+              <li>Principais objeções dos pacientes por tipo de serviço</li>
+              <li>Ticket médio por canal de origem</li>
+              <li>Oportunidades comerciais não aproveitadas</li>
+              <li>Perfil de pacientes de alto valor (LTV)</li>
             </ul>
           </div>
 
           <div className="bg-white p-4 rounded-lg">
             <div className="font-bold text-sky-700 mb-2">⚠️ Análise Preditiva</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• Previsão de no-show por paciente (score de risco)</li>
-              <li>• Leads com maior probabilidade de conversão</li>
-              <li>• Tendências de demanda por especialidade</li>
-              <li>• Períodos de baixa conversão esperada</li>
-              <li>• Projeção de receita mensal</li>
+            <ul className="space-y-1 text-slate-700 list-disc list-inside pl-1">
+              <li>Previsão de no-show por paciente (score de risco)</li>
+              <li>Leads com maior probabilidade de conversão</li>
+              <li>Tendências de demanda por especialidade</li>
+              <li>Períodos de baixa conversão esperada</li>
+              <li>Projeção de receita mensal</li>
             </ul>
           </div>
 
           <div className="bg-white p-4 rounded-lg">
             <div className="font-bold text-sky-700 mb-2">💰 ROI e Performance</div>
-            <ul className="space-y-1 text-slate-700">
-              <li>• ROI em tempo real de cada canal de aquisição</li>
-              <li>• CAC (Custo de Aquisição de Cliente) por origem</li>
-              <li>• LTV (Lifetime Value) por perfil de paciente</li>
-              <li>• Performance dos agentes de IA (taxa de resolução)</li>
-              <li>• Economia gerada vs. operação manual</li>
+            <ul className="space-y-1 text-slate-700 list-disc list-inside pl-1">
+              <li>ROI em tempo real de cada canal de aquisição</li>
+              <li>CAC (Custo de Aquisição de Cliente) por origem</li>
+              <li>LTV (Lifetime Value) por perfil de paciente</li>
+              <li>Performance dos agentes de IA (taxa de resolução)</li>
+              <li>Economia gerada vs. operação manual</li>
             </ul>
           </div>
 
@@ -65,4 +65,3 @@ export default function InteligenciaModalContent() {
     </div>
   );
 }
-

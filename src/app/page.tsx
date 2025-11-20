@@ -212,7 +212,7 @@ export default function Home() {
           <div className="mt-10 grid md:grid-cols-2 gap-6">
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Alto volume sem qualificação</h3>
-              <ul className="mt-3 space-y-1 text-slate-700">
+              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
                 <li>~150 leads/dia; 1 lead a cada 3,2 min</li>
                 <li>Qualificação básica consome 80% do tempo</li>
                 <li>Falta priorização por urgência/aderência</li>
@@ -220,7 +220,7 @@ export default function Home() {
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Agendas desconectadas</h3>
-              <ul className="mt-3 space-y-1 text-slate-700">
+              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
                 <li>Hospital IOP (Tasy) vs agenda particular</li>
                 <li>Conflitos e sobreposições</li>
                 <li>Dificuldade de encaixes e remarcações</li>
@@ -228,7 +228,7 @@ export default function Home() {
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Zero visibilidade comercial</h3>
-              <ul className="mt-3 space-y-1 text-slate-700">
+              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
                 <li>Não mede taxa de qualificação/conversão</li>
                 <li>Gargalos desconhecidos no funil</li>
                 <li>Sem previsão de no-show</li>
@@ -236,7 +236,7 @@ export default function Home() {
             </div>
             <div className="card">
               <h3 className="text-xl font-semibold text-prime">Tempo de resposta e follow-up</h3>
-              <ul className="mt-3 space-y-1 text-slate-700">
+              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
                 <li>Leads fora do horário se perdem</li>
                 <li>Falta follow-up estruturado</li>
                 <li>Leads qualificados esfriam sem ação</li>
@@ -259,7 +259,7 @@ export default function Home() {
             <div className="mt-6 grid md:grid-cols-2 gap-6">
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><CalendarCheck2 className="h-5 w-5"/> SDR Qualificador + Agendamento (WhatsApp)</div>
-                <ul className="mt-2 text-slate-700 space-y-1">
+                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Atendimento 24/7 com resposta imediata</li>
                   <li>Qualificação automática (particular × convênio)</li>
                   <li>Validação de convênios e proposta de horários</li>
@@ -267,7 +267,7 @@ export default function Home() {
               </div>
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><MessageSquare className="h-5 w-5"/> FAQ Inteligente (Educacional)</div>
-                <ul className="mt-2 text-slate-700 space-y-1">
+                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Procedimentos, recuperação e valores/convênios</li>
                   <li>Sobre o médico, localização e horários</li>
                   <li>Convida a agendar ao final (conversão)</li>
@@ -275,7 +275,7 @@ export default function Home() {
               </div>
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><BellRing className="h-5 w-5"/> Anti No‑Show + Follow‑Up</div>
-                <ul className="mt-2 text-slate-700 space-y-1">
+                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Lembretes D‑2, D‑1 e D‑2h + confirmação</li>
                   <li>Reagendamento automático e fila de espera</li>
                   <li>Follow‑up pós‑consulta (NPS, retornos, exames)</li>
@@ -283,7 +283,7 @@ export default function Home() {
               </div>
               <div className="card">
                 <div className="font-semibold text-prime flex items-center gap-2"><Stethoscope className="h-5 w-5"/> CRM + Agenda Unificada + Dashboard</div>
-                <ul className="mt-2 text-slate-700 space-y-1">
+                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Unifica Hospital IOP (Tasy) + particular</li>
                   <li>Funis, tags e histórico completo no CRM</li>
                   <li>KPIs, funil e relatórios executivos</li>
@@ -308,7 +308,7 @@ export default function Home() {
             </div>
             <div className="card">
               <div className="font-semibold text-prime">CONFIABILIDADE E SEGURANÇA</div>
-              <ul className="mt-3 space-y-4 text-slate-700">
+              <ul className="mt-3 space-y-4 text-slate-700 list-disc list-inside pl-1">
                 <li>Fallback: humanos assumem quando necessário.</li>
                 <li>Monitoramento (alertas em tempo real, playbook e reprocessamento).</li>
                 <li>Privacidade &amp; LGPD</li>
@@ -534,7 +534,7 @@ export default function Home() {
                   <div className="text-slate-600 text-sm">Mensalidade</div>
                   <div className="text-lg font-semibold">R$ 800,00/mês</div>
                 </div>
-                <ul className="mt-2 text-sm text-slate-700 space-y-1">
+                <ul className="mt-2 text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Agente FAQ especialista</li>
                   <li>Base de conhecimento completa</li>
                   <li>Integração com WhatsApp</li>
@@ -556,7 +556,7 @@ export default function Home() {
                   <div className="text-slate-600 text-sm">Mensalidade</div>
                   <div className="text-xl font-bold">R$ 2.200,00/mês</div>
                 </div>
-                <ul className="mt-2 text-sm text-slate-700 space-y-1">
+                <ul className="mt-2 text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Agente Orquestrador + SDR (Particular/Convênio)</li>
                   <li>Validação de convênios</li>
                   <li>Integração Omnichannel + CRM</li>
@@ -578,7 +578,7 @@ export default function Home() {
                   <div className="text-slate-600 text-sm">Mensalidade</div>
                   <div className="text-lg font-semibold">R$ 1.000,00/mês</div>
                 </div>
-                <ul className="mt-2 text-sm text-slate-700 space-y-1">
+                <ul className="mt-2 text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
                   <li>Confirmações D‑2/D‑1/D‑2h</li>
                   <li>Reagendamento inteligente + fila de espera</li>
                   <li>Follow‑up pós‑consulta</li>
@@ -602,7 +602,7 @@ export default function Home() {
                 <div className="text-slate-700 text-sm mt-2">Inclui: SDR + FAQ + No‑Show + CRM + Agenda Unificada + Dashboard</div>
                 <div className="mt-3 text-sm text-slate-700">
                   <div className="font-semibold text-slate-800">Extras</div>
-                  <ul className="mt-2 space-y-1">
+                  <ul className="mt-2 space-y-1 list-disc list-inside pl-1">
                     <li>Treinamento (8h) e suporte 60 dias</li>
                     <li>Acompanhamento mensal (3 meses)</li>
                   </ul>
@@ -617,7 +617,7 @@ export default function Home() {
               <div className="mt-3 text-slate-800 space-y-3">
                 <div className="text-sm">
                   <div className="font-semibold text-slate-800">Investimento Único</div>
-                  <ul className="mt-1 space-y-1 text-slate-700">
+                  <ul className="mt-1 space-y-1 text-slate-700 list-disc list-inside pl-1">
                     <li>À vista (5% de desconto)</li>
                     <li>5 parcelas de R$ 5.000</li>
                     <li>3x sem juros (cartão corporativo)</li>
@@ -625,7 +625,7 @@ export default function Home() {
                 </div>
                 <div className="text-sm">
                   <div className="font-semibold text-slate-800">Mensalidade</div>
-                  <ul className="mt-1 space-y-1 text-slate-700">
+                  <ul className="mt-1 space-y-1 text-slate-700 list-disc list-inside pl-1">
                     <li>Inicia no mês seguinte ao go‑live</li>
                     <li>Faturamento via boleto ou PIX</li>
                   </ul>
@@ -686,7 +686,7 @@ export default function Home() {
             <div className="rounded-lg border border-slate-200 p-4 bg-white">
               <div className="font-bold text-rose-600">SEM VISIBILIDADE</div>
               <div className="mt-3 text-slate-700 text-sm">Antes de implementar a solução</div>
-              <ul className="mt-3 space-y-1 text-slate-700 text-sm">
+              <ul className="mt-3 space-y-1 text-slate-700 text-sm list-disc list-inside pl-1">
                 <li>Conversão: 15%</li>
                 <li>No‑show: 25%</li>
                 <li>Consultas/mês: 675</li>
@@ -698,7 +698,7 @@ export default function Home() {
             <div className="rounded-lg border border-slate-200 p-4 bg-white">
               <div className="font-bold text-emerald-600">COM VISIBILIDADE TOTAL</div>
               <div className="mt-3 text-slate-700 text-sm">Depois de implantar IA + CRM + Dashboard</div>
-              <ul className="mt-3 space-y-1 text-slate-700 text-sm">
+              <ul className="mt-3 space-y-1 text-slate-700 text-sm list-disc list-inside pl-1">
                 <li>Conversão: 39% (+160%)</li>
                 <li>No‑show: 10% (−60%)</li>
                 <li>Consultas/mês: 1.750 (+1.075)</li>
