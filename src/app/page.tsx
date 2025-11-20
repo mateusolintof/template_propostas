@@ -716,7 +716,16 @@ function getEtapaTitle(etapa: 1 | 2 | 3 | 4): string {
 
 // Componente de conteúdo dos modais das etapas
 function EtapaModalContent({ etapa }: { etapa: 1 | 2 | 3 | 4 }) {
-  const etapaData = {
+  type EtapaConfig = {
+    title: string;
+    intro: string;
+    bullets?: string[];
+    cards?: { title: string; bullets: string[] }[];
+    omnichannel?: { title: string; description: string };
+    footer?: string;
+  };
+
+  const etapaData: Record<1 | 2 | 3 | 4, EtapaConfig> = {
     1: {
       title: "Etapa 1 - Recepção",
       intro: "Primeiro contato do paciente. O agente responde imediatamente, com tom humano e acolhedor.",
