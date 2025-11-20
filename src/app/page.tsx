@@ -905,7 +905,8 @@ function RoiModalContent() {
 
   const calculateCustos = (values: CustosInputs) => {
     const custoAtualMensal = values.funcionarios * values.salario;
-    const custoNovoMensal = (values.funcionarios - values.reducaoFuncionarios) * values.salario;
+    const funcionariosPosImplantacao = Math.max(values.funcionarios - values.reducaoFuncionarios, 0);
+    const custoNovoMensal = funcionariosPosImplantacao * values.salario;
     const economiaMensal = custoAtualMensal - custoNovoMensal;
     const economiaAnual = economiaMensal * 12;
     const roi12 = ((economiaAnual - investimento) / investimento) * 100;
