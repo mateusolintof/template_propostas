@@ -3,39 +3,43 @@
 export default function PhaseDetailModalContent({ phase }: { phase: 1 | 2 | 3 | 4 }) {
   const phaseData = {
     1: {
-      title: "Fase 1: Imersão e Arquitetura",
-      items: [
-        { title: "Workshop de Imersão", description: "Mapeamento de processos atuais, objeções reais dos pacientes e definição de stakeholders." },
-        { title: "Desenho de Fluxos Conversacionais", description: "Fluxograma completo de cada agente (SDR, FAQ, No‑Show) e árvore de decisões." },
-        { title: "Arquitetura Técnica de Agentes", description: "Definição da stack, integrações, segurança/LGPD e diagrama de arquitetura." },
-        { title: "Prototipagem e Validação", description: "Mockups de conversas-chave e ajustes com base no feedback da equipe." }
+      title: "Fase 1: Planejamento e Setup",
+      focus: "Alinhamento de regras de negócio e infraestrutura.",
+      deliverables: [
+        "Documento de Arquitetura dos Fluxos (SDR e FAQ)",
+        "Configuração do Ambiente (WhatsApp Business API)",
+        "Definição da Árvore de Decisão (Triagem)",
+        "Cronograma detalhado de implantação"
       ]
     },
     2: {
-      title: "Fase 2: Desenvolvimento dos Agentes",
-      items: [
-        { title: "Agente Orquestrador + SDR", description: "Qualificação automatizada (particular/convênio), validação de convênios e proposta de horários." },
-        { title: "Agente FAQ Educacional", description: "Base de conhecimento (procedimentos, recuperação, valores/convênios, sobre o médico, localização)." },
-        { title: "Agente Anti No‑Show", description: "Confirmações D‑2/D‑1/D‑2h, reagendamento e fila de espera." },
-        { title: "Teste Guiado (Human‑in‑the‑loop)", description: "Validação ponta a ponta com escala para humano quando necessário." }
+      title: "Fase 2: Desenvolvimento e Integração",
+      focus: "Construção dos agentes e conexão com sistemas.",
+      deliverables: [
+        "Agente SDR e FAQ operacionais em ambiente de homologação",
+        "Módulo de integração com Tasy (Leitura/Escrita)",
+        "Setup do CRM com funil personalizado",
+        "Configuração das réguas de No-Show (D-2, D-1)"
       ]
     },
     3: {
-      title: "Fase 3: Integrações e Painéis",
-      items: [
-        { title: "Agenda Unificada", description: "Integração Hospital IOP (Tasy) + agenda particular; prevenção de conflitos e sobreposições." },
-        { title: "CRM Comercial", description: "Funis, estágios, tags por especialidade/origem e histórico completo de conversas." },
-        { title: "Dashboard Executivo", description: "KPIs, funil completo, previsões de no‑show e relatórios executivos." },
-        { title: "Relatórios", description: "Mês atual, pipeline, crescimento vs mês anterior." }
+      title: "Fase 3: Validação e Treinamento",
+      focus: "Garantia de qualidade e preparação da equipe.",
+      deliverables: [
+        "Bateria de testes assistidos (Simulação de cenários)",
+        "Treinamento da equipe de recepção (Operação do CRM)",
+        "Playbook de Atendimento Híbrido (IA + Humano)",
+        "Ajustes finos de tom de voz e respostas"
       ]
     },
     4: {
-      title: "Fase 4: Go‑Live e Estabilização",
-      items: [
-        { title: "Go‑Live", description: "Deploy em produção com checklist final, backup e plano de rollback." },
-        { title: "Monitoramento 24/7", description: "Acompanhamento de conversas, correção de fluxos e melhoria contínua." },
-        { title: "Otimização de Conversões", description: "Ajustes de prompts e respostas FAQ com base em métricas reais." },
-        { title: "Treinamento e Handover", description: "Documentação final, playbook e treinamento avançado da equipe." }
+      title: "Fase 4: Go-Live e Estabilização",
+      focus: "Início da operação oficial e monitoramento.",
+      deliverables: [
+        "Virada de chave para produção",
+        "Monitoramento intensivo (Hypercare) por 30 dias",
+        "Relatório de performance da primeira semana",
+        "Entrega oficial do projeto e acessos administrativos"
       ]
     }
   };
@@ -43,15 +47,24 @@ export default function PhaseDetailModalContent({ phase }: { phase: 1 | 2 | 3 | 
   const data = phaseData[phase];
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
-      {data.items.map((item, idx) => (
-        <div key={idx} className="bg-slate-50 p-5 rounded-lg border border-slate-200">
-          <h4 className="font-bold text-lg text-prime-dark mb-2">{item.title}</h4>
-          <p className="text-slate-700 leading-relaxed">{item.description}</p>
-        </div>
-      ))}
+    <div className="p-6 space-y-6">
+      <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+        <p className="text-slate-600 text-sm font-medium">{data.focus}</p>
+      </div>
+      
+      <div>
+        <h4 className="font-bold text-prime mb-4 flex items-center gap-2">
+            📋 Entregáveis da Fase
+        </h4>
+        <ul className="space-y-3">
+            {data.deliverables.map((item, idx) => (
+                <li key={idx} className="flex items-start gap-3 text-sm text-slate-700 bg-white p-3 rounded border border-slate-100">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
+                    {item}
+                </li>
+            ))}
+        </ul>
+      </div>
     </div>
   );
 }
-
-// Componentes dos modais da seção Ganhos
