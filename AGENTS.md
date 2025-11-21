@@ -1,202 +1,80 @@
 Template de Propostas — Guia do Projeto
 
-Visão Geral do Template
-- Template para criar propostas interativas (landing de proposta) com conteúdo adaptável por cliente.
-- Estrutura modular: seções, modais e fluxos podem ser ativados/ajustados conforme a necessidade.
-- Este repositório é uma instância do template já adaptada para o projeto:
-  - Proposta: **Dr. Maurício Ernesto — Agentes de IA para Atendimento Comercial**
-  - Documento de origem do conteúdo de negócio: `public/docs/arquitetura.md`
+Visão Geral
+- Proposta interativa (landing + modais) com conteúdo adaptável por cliente.
+- Instância do template Convert.AI para **Dr. Maurício Ernesto — Agentes de IA para Atendimento Comercial**.
+- Documento-base de negócio: `public/docs/arquitetura.md` (gargalos, soluções, métricas, fluxos, investimentos).
 
 Stack
-- Next.js 15 (App Router), React 19
-- Tailwind v4 com `@theme inline`
-- Framer Motion (animações) e Lucide (ícones)
-- React Flow (fluxogramas interativos)
+- Next.js 15 (App Router) + React 19 (sem SSR nos fluxos via dynamic).
+- Tailwind v4 com `@theme inline`.
+- Framer Motion (animações), Lucide (ícones), React Flow (fluxos).
 
 Execução
-- Requisitos: Node 18+
-- Scripts:
-  - `npm run dev` — desenvolvimento em http://localhost:3001
-  - `npm run build` — build (Turbopack)
-  - `npm start` — produção
+- Requisitos: Node 18+.
+- Scripts: `npm run dev` (http://localhost:3001), `npm run build` (Turbopack), `npm start` (produção).
 
-Arquivos Principais (estrutura técnica)
-- `src/app/layout.tsx`
-  - Define fontes (Geist + Montserrat), idioma (`pt-BR`) e `metadata` da proposta.
-- `src/app/page.tsx`
-  - Estrutura da página, seções, navegação por âncoras e mapeamento de modais/fluxos.
-  - Campos do cliente atual:
-    - `preparedFor = "Dr. Maurício Ernesto"`
-    - `proposalDate = "Outubro 2025"`
-  - Define o tipo `ModalKind` e qual modal abrir a partir dos CTAs das seções.
-- `src/app/components/Modal.tsx`
-  - Componente de modal animado (Framer Motion) com:
-    - Tamanhos: `size="full"` (fluxos) e `size="md"` (comparativos/briefings).
-    - Acessibilidade: `focus-trap`, ESC fecha, clique no overlay fecha, `aria-modal`.
-    - Suporte a `titleAlign` e `closeLabel` (ex.: modal de ROI).
-- `src/app/components/FlowDiagram.tsx`
-  - Definição dos fluxos em React Flow e tipo `FlowKind`:
-    - `"agendamento"` — fluxo SDR Qualificador + Agenda Unificada (Tasy + Particular).
-    - `"triagem-noshow"` — fluxo Anti No‑Show e fila de espera.
-    - `"faq"` — fluxo de FAQ Inteligente (educacional).
-  - Função `nodesAndEdges(kind)` retorna `nodes` e `edges` para cada fluxo.
-  - Usa `useReducedMotion` para desativar animações quando necessário.
-- `src/app/components/modal-content/*`
-  - Conteúdos detalhados para cada modal (veja seção “Mapa de Modais” abaixo).
-- `src/app/globals.css`
-  - Tokens de tema (`--prime-*`), fontes e utilitários globais (`.section`, `.card`, `.btn-primary`, etc.).
-  - Estilos dos nós do React Flow (`.flow-node`, `.flow-node--primary`, `.flow-node--decision`, `.flow-node--output`).
-- `public/branding/`
-  - Logos e ativos da identidade visual do cliente:
-    - `logo.svg` — logo atual do Dr. Maurício (usado no nav e no hero).
-    - `logo-placeholder.svg` — logo genérica de fallback.
-  - README local com instruções rápidas de branding.
-- `public/docs/arquitetura.md`
-  - Documento de arquitetura de negócio com narrativa completa, gargalos, soluções, KPIs e fluxos textuais.
-  - É a principal referência para revisar textos, métricas e argumentos da proposta.
+Arquivos-Chave
+- `src/app/layout.tsx`: fontes Geist + Montserrat, idioma `pt-BR`, metadata.
+- `src/app/page.tsx`: seções, âncoras, CTAs e dispatch de `ModalKind`.
+  - Campos do cliente: `preparedFor = "Dr. Maurício Ernesto"`, `proposalDate = "Outubro 2025"`.
+- `src/app/components/Modal.tsx`: modal animado (`size="full" | "md"`, ESC/overlay, `focus-trap`, `aria-modal`, `titleAlign`).
+- `src/app/components/FlowDiagram.tsx`: React Flow (`FlowKind = "agendamento" | "triagem-noshow" | "faq"`), `nodesAndEdges`, `MiniMap/Controls/Background`, `useReducedMotion`.
+- `src/app/components/modal-content/*`: conteúdos de modais (CRM, Dashboard, ROI, fases, ganhos, etc.).
+- `src/app/globals.css`: tokens (`--prime-*`), utilitários `.section`, `.section-title`, `.subtitle`, `.card`, `.badge`, `.btn-primary`, `.hero-kicker`, estilos de nós `.flow-node*`.
+- `public/branding/logo.svg`: logo oficial do cliente (nav/hero).
 
 Branding e Tema
-- Identificação do cliente (projeto atual):
-  - `preparedFor = "Dr. Maurício Ernesto"` e `proposalDate = "Outubro 2025"` em `src/app/page.tsx`.
-- Logos:
-  - `public/branding/logo.svg` é usado no nav e no hero (`next/image`).
-  - Ajuste a referência em `src/app/page.tsx` ao trocar o arquivo (default do template: `branding/logo-placeholder.svg`).
-- Cores (definidas em `src/app/globals.css`):
-  - `--prime-primary: #041e42` (navy escuro)
-  - `--prime-accent: #41b6e6` (azul claro)
-  - `--prime-dark: #041e42` (texto em botões e acentos)
-- Boas práticas de identidade:
-  - Mantenha contraste AA (WCAG) para textos e botões.
-  - Prefira SVG para logotipos; otimize PNG/JPG quando necessários.
+- Cores: `--prime-primary: #041e42`, `--prime-accent: #41b6e6`, `--prime-dark: #041e42`.
+- Contrast AA, uso prioritário de tokens, evitar hardcode de cores.
+- Ícones Lucide (16–20px) principais: `CalendarCheck2`, `BellRing`, `MessageSquare`, `Stethoscope`, `KanbanSquare`, `BarChart3`, `Trophy`, `Brain`, `Lightbulb`, `FileBarChart`, `UserRound`, `Sparkles`, `PanelsTopLeft`, `CheckCircle2`, `Gauge`, `Target`, `ShieldCheck`, `AlertTriangle`, `Clock3`, `Zap`.
 
-Conteúdo por Seção (implementação atual)
-- Todas as seções abaixo estão implementadas em `src/app/page.tsx`.
-- Hero (`id="hero"`)
-  - Kicker: “PROPOSTA DE SOLUÇÃO COM IA”.
-  - Título: “Agentes de IA para Atendimento Comercial”.
-  - Subtítulo: automação ponta a ponta (captação, agendamento, follow-up e inteligência comercial).
-  - Badges: `preparedFor` (cliente) e `proposalDate` (data).
-  - Logo do cliente ao lado do nav e versão maior no hero (`/branding/logo.svg`).
-- Quem Somos (`id="quem-somos"`)
-  - Seção “Quem é a Convert.AI?” explicando história, foco em marketing médico e combinação Marketing + IA.
-  - Ajustar texto aqui ao replicar o template para outro cliente/segmento.
-- Desafio Atual (`id="desafio"`)
-  - 4 cartões com dores do contexto do consultório do Dr. Maurício:
-    - Alto volume sem qualificação (~150 leads/dia, 1 lead a cada 3,2 min).
-    - Agendas desconectadas (Hospital IOP/Tasy vs agenda particular).
-    - Zero visibilidade comercial (taxas de conversão desconhecidas).
-    - Tempo de resposta e follow-up (leads perdidos, follow-up inexistente).
-- Nossas Soluções (`id="solucoes"`)
-  - 4 grupos de agentes:
-    - SDR Qualificador + Agendamento (WhatsApp).
-    - FAQ Inteligente (Educacional).
-    - Anti No‑Show + Follow‑Up.
-    - CRM + Agenda Unificada + Dashboard.
-  - Painel “Soluções Inteligentes” com destaques de CRM, Dashboard, Predição, Insights e Relatórios.
-  - Painel “Confiabilidade e Segurança” com fallback humano, LGPD, monitoramento e suporte.
-- Fluxos e Ferramentas (`id="fluxos"`)
-  - Cartões “AGENTES DE IA” com botão “Ver fluxo”:
-    - Agendamento → abre modal `solution` com `kind="agendamento"`.
-    - Pré-triagem / No‑show → abre modal `solution` com `kind="triagem-noshow"`.
-    - FAQ Inteligente → abre modal `solution` com `kind="faq"`.
-  - Cartões de ferramentas:
-    - CRM → abre modal `crm`.
-    - Dashboard → abre modal `dashboard`.
-- Ganhos Esperados (`id="ganhos"`)
-  - 4 cartões principais:
-    - “O que você conquista” → CTA abre modal `conquistas`.
-    - “Inteligência em tempo real” → CTA abre modal `inteligencia`.
-    - “Exemplos de insights” → CTA abre modal `insights`.
-    - “Relatórios avançados” → CTA abre modal `relatorios`.
-  - Métricas e exemplos alinhados ao documento de arquitetura (conversão, no-show, consultas/mês, receita etc.).
-- Calculadora de ROI (`id="roi"`)
-  - Card com CTA “Calcular ROI” → abre modal `roi`.
-  - Usa `RoiModalContent` para simular cenários de faturamento e redução de custos (investimento fixo de R$ 30.000).
-- Investimento (`id="investimento"`)
-  - Cards de módulos individuais (FAQ Inteligente, SDR Qualificador + Agendamento, Anti No‑Show).
-  - Card “Solução Full — Pacote Completo” com descontos e extras.
-  - Card adicional com resumo de condições e o modal `valueinfo` comparando “sem visibilidade” vs “com visibilidade total”.
-- Plano de Implantação (`id="plano"`)
-  - 4 fases: Imersão/Arquitetura; Desenvolvimento dos Agentes; Integrações/Painéis; Go‑Live.
-  - Cada fase possui CTA “Ver detalhamento” que abre o modal `phases` com a `phase` correspondente.
-- Próximos Passos (`id="cta"`)
-  - Três passos: Alinhamento final → Aprovação → Início do Projeto.
-  - Sem CTAs de conversão agressiva; foco em proposta consultiva.
+Mapa das Seções (page.tsx)
+- Nav/Header: logo `/branding/logo.svg`; âncoras `#quem-somos #desafio #solucoes #fluxos #plano #ganhos #investimento #cta`.
+- Hero: kicker “PROPOSTA DE SOLUÇÃO COM IA”, título “Agentes de IA para Atendimento Comercial”, subtítulo de automação ponta a ponta; badges `preparedFor`/`proposalDate`; logo em destaque.
+- Quem Somos: Convert.AI, marketing médico + IA.
+- Desafio: 4 dores (150 leads/dia, agendas Tasy + particular, zero visibilidade, follow-up lento).
+- Soluções: 4 blocos (SDR + Agendamento, FAQ Inteligente, Anti No-Show, CRM + Agenda + Dashboard) + painéis “Soluções Inteligentes” e “Confiabilidade e Segurança”.
+- Fluxos e Ferramentas: cards de agentes (abrem modais `solution` com `kind="agendamento" | "triagem-noshow" | "faq"`) e cards de CRM/Dashboard.
+- Ganhos: cards com CTAs para modais `conquistas`, `inteligencia`, `insights`, `relatorios` (métricas ilustrativas).
+- ROI: card para modal `roi` (simulações de faturamento e redução de custos; base R$ 30.000).
+- Investimento (layout atualizado):
+  - Linha 1 (grid 3 colunas): módulos individuais
+    - FAQ Inteligente — Setup R$ 10.000; Mensal R$ 800/mês; Tira-dúvidas 24/7, Base de Conhecimento Educacional.
+    - SDR + Agendamento (tag “Core / Principal”) — Setup R$ 20.000; Mensal R$ 2.200/mês; Qualificação de Leads, Integração Tasy (Leitura/Escrita).
+    - Anti No-Show — Setup R$ 10.000; Mensal R$ 1.000/mês; Confirmação D-2 e D-1, Gestão de Fila de Espera.
+  - Linha 2 (grid 2 colunas):
+    - Ecossistema Full (destaque visual): tag “Melhor Custo-Benefício”; Setup de R$ 40.000 por R$ 25.000 (-37%); Mensal de R$ 4.000/mês por R$ 2.500/mês; benefícios: SDR + Agendamento, FAQ Inteligente, Anti No-Show, Integração Tasy Completa, CRM + Dashboard Executivo, Treinamento + 30 dias assistidos; CTA “Selecionar Pacote Completo”.
+    - Condições de Pagamento: Setup A/B/C (à vista 5% off PIX/TED; entrada + 4 boletos; até 3x sem juros cartão corporativo); Mensalidade inicia 30 dias após Go-Live; boleto mensal ou PIX recorrente; disclaimer cobrindo servidores/BD/suporte/backups/manutenção.
+- Plano: 4 fases (Imersão/Arquitetura; Desenvolvimento dos Agentes; Integrações/Painéis; Go-Live) com CTAs para modal `phases`.
+- CTA final: passos Alinhamento → Aprovação → Início; CTA para formalizar contratação e modal de fases.
 
 Mapa de Modais e Conteúdos
-- Todos os modais são controlados em `src/app/page.tsx` via `ModalKind` e renderizados com `Modal` (`src/app/components/Modal.tsx`).
-- Fluxos (`type: "solution"`)
-  - Mapeados em `src/app/components/FlowDiagram.tsx` com `FlowKind = "agendamento" | "triagem-noshow" | "faq"`.
-  - Usados em modais de fluxo com `size="full"`.
-- CRM (`type: "crm"`)
-  - Conteúdo em `src/app/components/modal-content/CRMModalContent.tsx`.
-  - Funis: principal, follow-up e agendados, com colunas e cards simulando leads e valores.
-- Dashboard (`type: "dashboard"`)
-  - Conteúdo em `src/app/components/modal-content/DashboardModalContent.tsx`.
-  - Abas/quadros com KPIs, funil de conversão, exemplos de gráficos e visão de agendamentos.
-- Fases do Projeto (`type: "phases"`)
-  - Conteúdo em `src/app/components/modal-content/PhaseDetailModalContent.tsx`.
-  - Recebe `phase: 1 | 2 | 3 | 4` e detalha objetivos, atividades, integrações, entregáveis, riscos e premissas.
-- Valor/Comparativo (`type: "valueinfo"`)
-  - Conteúdo inline no próprio `src/app/page.tsx` dentro do modal “Gestão às cegas vs Gestão inteligente”.
-  - Comparação entre cenário sem/with visibilidade (KPIs e receita) + disclaimer de números ilustrativos.
-- Ganhos / Inteligência / Insights / Relatórios
-  - `type: "conquistas"` → `ConquistasModalContent.tsx`: ganhos práticos, tabelas e mini-charts.
-  - `type: "inteligencia"` → `InteligenciaModalContent.tsx`: dados em tempo real, alertas, priorização de oportunidades.
-  - `type: "insights"` → `InsightsModalContent.tsx`: recomendações acionáveis (horários, canais, funil).
-  - `type: "relatorios"` → `RelatoriosModalContentDoc.tsx`: cruzamento de dados marketing/CRM/fechamento, visões executiva e granular.
-- Etapas do Atendimento (`type: "etapa"`)
-  - Conteúdo em `src/app/components/modal-content/EtapaModalContent.tsx`.
-  - Etapas 1–4: Recepção → Agente SDR → Triagem → Atendimento, com descrição de cada momento.
-- Calculadora de ROI (`type: "roi"`)
-  - Conteúdo em `src/app/components/modal-content/RoiModalContent.tsx`.
-  - Simulações para aumento de faturamento e redução de quadro (ROI em 12 meses).
+- `solution`: fluxos em tela cheia via `FlowDiagramLazy` (`agendamento`, `triagem-noshow`, `faq`), respeitando `useReducedMotion`.
+- `crm` (`CRMModalContent.tsx`): visão executiva com seleção de período/filtro + badge IA, cards de SLA/pipeline, alertas, sidebar de funis (principal/followup/agendados), colunas Kanban com prioridade, próximo passo, notas, SLA, status/hora/origem.
+- `dashboard` (`DashboardModalContent.tsx`): abas overview/funil/agendamentos/insights; KPIs com metas/barras; status operação (SLA 6 min, bots 24/7, LGPD); funil com perdas/ações; agenda diária e distribuição particular/convênio; insights com ações rápidas, alerta crítico, objeção principal, melhor canal, tendência positiva.
+- `phases` (`PhaseDetailModalContent.tsx`): objetivos, atividades, integrações, entregáveis, riscos e premissas por fase (1–4).
+- `conquistas`, `inteligencia`, `insights`, `relatorios`: ganhos operacionais, inteligência em tempo real, recomendações acionáveis, relatórios executivo/granular.
+- `etapa`: etapas 1–4 (Recepção, SDR, Triagem, Atendimento).
+- `roi`: simulador de ROI (faturamento e redução de custos; ROI 12 meses).
+- `valueinfo`: comparativo “Gestão às cegas vs Gestão inteligente” (inline em `page.tsx`).
 
-Fluxos (React Flow) — Como editar/criar
-- Arquivo: `src/app/components/FlowDiagram.tsx`.
-- Para adicionar novo fluxo:
-  - Atualize `export type FlowKind` para incluir o novo identificador.
-  - Adicione um novo case em `nodesAndEdges(kind)` retornando `nodes` e `edges`.
-  - Em `src/app/page.tsx`:
-    - Adicione um card na seção “AGENTES DE IA” (seção Fluxos) mapeando para o novo `FlowKind`.
-    - Configure o botão “Ver fluxo” para abrir `{ type: "solution", kind: <novoKind>, title: "<Título do fluxo>" }`.
-- Boas práticas:
-  - 6–12 nós por diagrama; títulos curtos; cores consistentes com o tema (use classes `.flow-node*`).
-  - Use `fitViewOptions` para garantir enquadramento e mantenha `MiniMap`, `Controls` e `Background`.
-  - Evite poluição visual; priorize legibilidade e narrativa de negócio.
+Fluxos (React Flow) — editar/criar
+- `FlowDiagram.tsx`: atualizar `FlowKind`, `nodesAndEdges` e seções da página ao adicionar fluxo.
+- Boas práticas: 6–12 nós, títulos curtos, `.flow-node*`, `fitViewOptions`, `MiniMap/Controls/Background`, evitar poluição visual.
 
-Estilo e Convenções
-- Linguagem: Português (pt‑BR), tom consultivo e direto.
-- Código:
-  - TypeScript; nomes descritivos; evitar variáveis de uma letra.
-  - Evitar comentários supérfluos; priorizar código legível.
-- CSS:
-  - Priorizar tokens do tema definidos em `src/app/globals.css` em vez de cores hardcoded.
-  - Utilizar utilitários do Tailwind v4 (`@theme inline`) para cores, tipografia e espaçamentos.
-- Ícones:
-  - Lucide com tamanho 16–20 px nos cards e títulos.
-  - Ícones usados no projeto atual incluem: `CalendarCheck2`, `BellRing`, `MessageSquare`, `Stethoscope`, `KanbanSquare`, `BarChart3`, `Trophy`, `Brain`, `Lightbulb`, `FileBarChart`, `UserRound`, `Sparkles`, `PanelsTopLeft`, `CheckCircle2`.
-
-Acessibilidade
-- Fornecer `alt` descritivo para logos/imagens (ex.: `alt={\`Logo ${preparedFor}\`}`).
-- Garantir contraste mínimo AA para texto/botões.
-- Respeitar `prefers-reduced-motion`:
-  - Modal e FlowDiagram já usam `useReducedMotion` para reduzir animações.
-  - Ao adicionar novas animações, seguir o mesmo padrão.
-
-Desempenho
-- Prefira SVG para logos e ícones; otimize PNG/JPG.
-- Evite imagens pesadas no hero; reutilize assets em `public/branding/`.
-- React Flow é carregado via `dynamic import` sem SSR — manter essa abordagem para novos fluxos.
-
-Repositório (Local)
-- Este template começa sem remoto. Quando necessário, crie o remoto e configure `origin`.
-- Commits: mensagens curtas e descritivas (ex.: `feat:`, `chore:`, `fix:`).
+Estilo e Conteúdo
+- Linguagem: pt-BR, tom consultivo e direto.
+- Código: TypeScript, nomes descritivos, evitar comentários supérfluos.
+- CSS: usar tokens do tema; Tailwind v4 (`@theme inline`) para cores/spacing/tipografia.
+- Acessibilidade: `alt` descritivo, contraste AA, respeitar `prefers-reduced-motion`.
+- Desempenho: priorizar SVGs, evitar imagens pesadas; React Flow carregado sem SSR.
 
 Checklist de Entrega (status deste projeto)
-- [x] Atualizar `preparedFor` e `proposalDate` em `src/app/page.tsx`.
-- [x] Substituir `public/branding/logo-placeholder.svg` pela logo do cliente.
-- [x] Ajustar `--prime-*` em `src/app/globals.css` conforme a identidade do cliente.
-- [x] Revisar textos de seções e modais para o contexto do cliente (base: `public/docs/arquitetura.md`).
-- [x] Validar contraste e responsividade (mobile/desktop).
-- [x] Conferir métricas/valores e adicionar disclaimer quando necessário (ex.: modais de valor/ROI).
+- [x] `preparedFor`/`proposalDate` atualizados.
+- [x] `logo.svg` do cliente aplicado.
+- [x] `--prime-*` ajustadas no tema.
+- [x] Textos revisados com base em `public/docs/arquitetura.md`.
+- [x] Contraste e responsividade validados.
+- [x] Métricas ilustrativas com disclaimers.
+- [x] Seção de Investimento atualizada (3 módulos + pacote full + condições).

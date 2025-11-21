@@ -490,7 +490,7 @@ export default function DashboardModalContent() {
                   <h4 className="font-bold text-slate-900">Objeção Principal</h4>
                 </div>
                 <p className="text-sm text-slate-700 mb-4">
-                  79% dos leads de cirurgia que não convertem mencionam "preço alto". Taxa de conversão: apenas 22%.
+                  79% dos leads de cirurgia que não convertem mencionam “preço alto”. Taxa de conversão: apenas 22%.
                 </p>
                 <div className="bg-sky-50 border border-sky-200 p-3 rounded-lg">
                   <div className="font-semibold text-sky-900 text-sm">💡 Ação sugerida:</div>
