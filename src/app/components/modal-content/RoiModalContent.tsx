@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TrendingUp, ArrowRight, Calculator, DollarSign } from "lucide-react";
 
 type FaturamentoInputs = {
   leadsMes: number;
@@ -9,224 +10,149 @@ type FaturamentoInputs = {
   ticketMedio: number;
 };
 
-type CustosInputs = {
-  funcionarios: number;
-  salario: number;
-  reducaoFuncionarios: number;
-};
-
 type Props = {
   preparedFor: string;
 };
 
-const investimento = 30000;
+const investimento = 30000; // Setup único
+const mensalidade = 2500;   // Mensalidade recorrente
+
 const currencyFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
   maximumFractionDigits: 0,
 });
-const percentFormatter = new Intl.NumberFormat("pt-BR", {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1,
-});
 
-const formatCurrency = (value: number) =>
-  currencyFormatter.format(Number.isFinite(value) ? value : 0);
-const formatPercent = (value: number) =>
-  `${percentFormatter.format(Number.isFinite(value) ? value : 0)}%`;
+const formatCurrency = (value: number) => currencyFormatter.format(value);
 
 const defaultFaturamento: FaturamentoInputs = {
-  leadsMes: 4500,
+  leadsMes: 4500, // Baseado em 150/dia
   taxaConversaoAtual: 15,
-  taxaConversaoNova: 32,
+  taxaConversaoNova: 35, // Meta conservadora
   ticketMedio: 400,
 };
 
-const defaultCustos: CustosInputs = {
-  funcionarios: 7,
-  salario: 3500,
-  reducaoFuncionarios: 2,
-};
-
-const calculateFaturamento = (values: FaturamentoInputs) => {
-  const vendasAtuais = values.leadsMes * (values.taxaConversaoAtual / 100);
-  const vendasNovas = values.leadsMes * (values.taxaConversaoNova / 100);
-  const faturamentoAtual = vendasAtuais * values.ticketMedio;
-  const faturamentoNovo = vendasNovas * values.ticketMedio;
-  const aumentoMensal = faturamentoNovo - faturamentoAtual;
-  const aumentoAnual = aumentoMensal * 12;
-  const roi12 = ((aumentoAnual - investimento) / investimento) * 100;
-  return { aumentoMensal, aumentoAnual, roi12 };
-};
-
-const calculateCustos = (values: CustosInputs) => {
-  const custoAtualMensal = values.funcionarios * values.salario;
-  const custoNovoMensal = (values.funcionarios - values.reducaoFuncionarios) * values.salario;
-  const economiaMensal = custoAtualMensal - custoNovoMensal;
-  const economiaAnual = economiaMensal * 12;
-  const roi12 = ((economiaAnual - investimento) / investimento) * 100;
-  return { economiaMensal, economiaAnual, roi12 };
-};
-
 export default function RoiModalContent({ preparedFor }: Props) {
-  const [faturamentoInputs, setFaturamentoInputs] = useState<FaturamentoInputs>(defaultFaturamento);
-  const [faturamentoResultados, setFaturamentoResultados] = useState(() => calculateFaturamento(defaultFaturamento));
-  const [custosInputs, setCustosInputs] = useState<CustosInputs>(defaultCustos);
-  const [custosResultados, setCustosResultados] = useState(() => calculateCustos(defaultCustos));
+  const [inputs, setInputs] = useState<FaturamentoInputs>(defaultFaturamento);
 
-  const handleFaturamentoChange = (key: keyof FaturamentoInputs, value: number) => {
-    setFaturamentoInputs((prev) => ({ ...prev, [key]: value }));
-  };
+  // Cálculos
+  const leadsConvertidosAtuais = inputs.leadsMes * (inputs.taxaConversaoAtual / 100);
+  const receitaAtual = leadsConvertidosAtuais * inputs.ticketMedio;
+  
+  const leadsConvertidosNovos = inputs.leadsMes * (inputs.taxaConversaoNova / 100);
+  const receitaNova = leadsConvertidosNovos * inputs.ticketMedio;
+  
+  const receitaExtraMensal = receitaNova - receitaAtual;
+  const receitaExtraAnual = receitaExtraMensal * 12;
+  
+  // ROI no primeiro ano (Receita Extra Anual - (Setup + 12x Mensalidade)) / Custo Total
+  const custoPrimeiroAno = investimento + (mensalidade * 12);
+  const lucroLiquidoPrimeiroAno = receitaExtraAnual - custoPrimeiroAno;
+  const roi = (lucroLiquidoPrimeiroAno / custoPrimeiroAno) * 100;
 
-  const handleCustosChange = (key: keyof CustosInputs, value: number) => {
-    setCustosInputs((prev) => ({ ...prev, [key]: value }));
+  const handleChange = (key: keyof FaturamentoInputs, value: number) => {
+    setInputs((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
-    <div className="h-full bg-white">
-      <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-6">
-        <div className="text-center space-y-2">
-          <div className="text-xs uppercase tracking-wide text-emerald-700 font-semibold">Simulador interativo</div>
-          <h2 className="text-3xl md:text-4xl font-bold text-prime">Calculadora de ROI</h2>
-          <p className="text-slate-600 text-sm md:text-base max-w-3xl mx-auto">
-            Avalie rapidamente o ganho anual e o ROI em 12 meses considerando investimento fixo de R$ 30.000. Ajuste os campos e calcule cada cenário de forma independente.
-          </p>
+    <div className="h-full bg-slate-50 p-4 md:p-8 overflow-auto">
+      <span className="sr-only">Simulação personalizada para {preparedFor}</span>
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
+        
+        {/* Coluna de Inputs */}
+        <div className="md:w-5/12 p-8 bg-slate-50 border-r border-slate-100">
+            <div className="mb-6">
+                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <Calculator className="h-5 w-5 text-prime" /> Parâmetros
+                </h3>
+                <p className="text-sm text-slate-500">Ajuste conforme a realidade do consultório.</p>
+            </div>
+
+            <div className="space-y-5">
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Leads Mensais</label>
+                    <input 
+                        type="number" 
+                        value={inputs.leadsMes} 
+                        onChange={(e) => handleChange("leadsMes", Number(e.target.value))}
+                        className="w-full p-3 border border-slate-200 rounded-lg font-semibold text-slate-700 focus:border-prime focus:ring-1 focus:ring-prime outline-none"
+                    />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Conversão Hoje (%)</label>
+                        <input 
+                            type="number" 
+                            value={inputs.taxaConversaoAtual} 
+                            onChange={(e) => handleChange("taxaConversaoAtual", Number(e.target.value))}
+                            className="w-full p-3 border border-slate-200 rounded-lg font-semibold text-slate-700 focus:border-prime focus:ring-1 focus:ring-prime outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-bold text-emerald-600 uppercase mb-2">Meta com IA (%)</label>
+                        <input 
+                            type="number" 
+                            value={inputs.taxaConversaoNova} 
+                            onChange={(e) => handleChange("taxaConversaoNova", Number(e.target.value))}
+                            className="w-full p-3 border border-emerald-200 bg-emerald-50 rounded-lg font-bold text-emerald-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Ticket Médio (R$)</label>
+                    <input 
+                        type="number" 
+                        value={inputs.ticketMedio} 
+                        onChange={(e) => handleChange("ticketMedio", Number(e.target.value))}
+                        className="w-full p-3 border border-slate-200 rounded-lg font-semibold text-slate-700 focus:border-prime focus:ring-1 focus:ring-prime outline-none"
+                    />
+                </div>
+            </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 items-start">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Eficiência no Atendimento</p>
-              <h3 className="text-xl font-bold text-prime">ROI por aumento de faturamento</h3>
-              <p className="text-slate-600 text-sm mt-1">Projete a receita adicional com melhor conversão dos leads atuais.</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Leads por mês
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.leadsMes}
-                  onChange={(e) => handleFaturamentoChange("leadsMes", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Taxa de conversão atual (%)
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.taxaConversaoAtual}
-                  onChange={(e) => handleFaturamentoChange("taxaConversaoAtual", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Nova taxa de conversão (%)
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.taxaConversaoNova}
-                  onChange={(e) => handleFaturamentoChange("taxaConversaoNova", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Ticket médio (R$)
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={faturamentoInputs.ticketMedio}
-                  onChange={(e) => handleFaturamentoChange("ticketMedio", Number(e.target.value))}
-                />
-              </label>
-            </div>
-            <button
-              className="btn-primary w-full justify-center"
-              onClick={() => setFaturamentoResultados(calculateFaturamento(faturamentoInputs))}
-            >
-              Calcular ROI – Faturamento
-            </button>
-            <div className="grid md:grid-cols-3 gap-3">
-              {[
-                { label: "Aumento Mensal de Faturamento", value: formatCurrency(faturamentoResultados.aumentoMensal) },
-                { label: "Aumento Anual de Faturamento", value: formatCurrency(faturamentoResultados.aumentoAnual) },
-                { label: "ROI em 12 meses", value: formatPercent(faturamentoResultados.roi12) },
-              ].map((item) => (
-                <div key={item.label} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                  <div className="text-xs uppercase tracking-wide text-slate-600 font-semibold">{item.label}</div>
-                  <div className="text-lg font-bold text-slate-900 mt-1">{item.value}</div>
-                </div>
-              ))}
-            </div>
-            <div className="text-xs text-slate-500">Investimento considerado: {formatCurrency(investimento)}</div>
-          </div>
+        {/* Coluna de Resultados */}
+        <div className="md:w-7/12 p-8 flex flex-col justify-center bg-white relative overflow-hidden">
+             <div className="absolute top-0 right-0 p-4 opacity-5">
+                <DollarSign size={120} />
+             </div>
 
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-600 font-semibold">Redução de Custos</p>
-              <h3 className="text-xl font-bold text-prime">ROI por redução de quadro</h3>
-              <p className="text-slate-600 text-sm mt-1">Simule economia liberando FTEs com agentes de IA.</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Funcionários dedicados hoje
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={custosInputs.funcionarios}
-                  onChange={(e) => handleCustosChange("funcionarios", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                Salário médio (R$)
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={custosInputs.salario}
-                  onChange={(e) => handleCustosChange("salario", Number(e.target.value))}
-                />
-              </label>
-              <label className="flex flex-col gap-1 text-sm text-slate-700">
-                FTEs liberados
-                <input
-                  type="number"
-                  min={0}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus:border-prime focus:ring-1 focus:ring-prime outline-none"
-                  value={custosInputs.reducaoFuncionarios}
-                  onChange={(e) => handleCustosChange("reducaoFuncionarios", Number(e.target.value))}
-                />
-              </label>
-            </div>
-            <button
-              className="btn-primary w-full justify-center"
-              onClick={() => setCustosResultados(calculateCustos(custosInputs))}
-            >
-              Calcular ROI – Equipe
-            </button>
-            <div className="grid md:grid-cols-3 gap-3">
-              {[
-                { label: "Economia Mensal", value: formatCurrency(custosResultados.economiaMensal) },
-                { label: "Economia Anual", value: formatCurrency(custosResultados.economiaAnual) },
-                { label: "ROI em 12 meses", value: formatPercent(custosResultados.roi12) },
-              ].map((item) => (
-                <div key={item.label} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-                  <div className="text-xs uppercase tracking-wide text-slate-600 font-semibold">{item.label}</div>
-                  <div className="text-lg font-bold text-slate-900 mt-1">{item.value}</div>
+             <div className="relative z-10 space-y-8">
+                <div>
+                    <div className="text-sm text-slate-500 font-medium uppercase tracking-wide">Potencial de Receita Adicional</div>
+                    <div className="flex items-baseline gap-1 mt-1">
+                        <span className="text-4xl md:text-5xl font-extrabold text-emerald-600">
+                            +{formatCurrency(receitaExtraMensal)}
+                        </span>
+                        <span className="text-slate-500 font-medium">/mês</span>
+                    </div>
+                    <p className="text-sm text-emerald-700 mt-2 font-medium bg-emerald-50 inline-block px-3 py-1 rounded-full border border-emerald-100">
+                        <TrendingUp className="inline h-3 w-3 mr-1" />
+                        {Math.round(leadsConvertidosNovos - leadsConvertidosAtuais)} agendamentos extras mensais
+                    </p>
                 </div>
-              ))}
-            </div>
-            <div className="text-xs text-slate-500">Investimento considerado: {formatCurrency(investimento)}</div>
-          </div>
-        </div>
 
-        <div className="text-center text-xs text-slate-500">
-          Resultados ilustrativos; ajuste os parâmetros conforme dados reais do {preparedFor}.
+                <div className="grid grid-cols-2 gap-6 border-t border-slate-100 pt-6">
+                    <div>
+                        <div className="text-xs text-slate-400 uppercase font-bold">Acumulado em 1 Ano</div>
+                        <div className="text-xl font-bold text-slate-800 mt-1">+{formatCurrency(receitaExtraAnual)}</div>
+                    </div>
+                    <div>
+                        <div className="text-xs text-slate-400 uppercase font-bold">ROI do Projeto</div>
+                        <div className="text-xl font-bold text-prime mt-1">{Math.round(roi)}%</div>
+                    </div>
+                </div>
+
+                <div className="bg-slate-50 rounded-lg p-4 text-xs text-slate-500 leading-relaxed">
+                    * Cálculo considera Investimento de Setup ({formatCurrency(investimento)}) + Mensalidade Anual ({formatCurrency(mensalidade * 12)}). 
+                    O ROI indica quantas vezes o lucro cobre o custo total no primeiro ano.
+                </div>
+
+                <button className="w-full py-4 bg-prime hover:bg-prime-dark text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-prime/20">
+                    Validar Viabilidade Financeira <ArrowRight className="h-5 w-5" />
+                </button>
+             </div>
         </div>
       </div>
     </div>

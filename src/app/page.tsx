@@ -7,22 +7,19 @@ import {
   CalendarCheck2,
   BellRing,
   MessageSquare,
-  Stethoscope,
   KanbanSquare,
   BarChart3,
-  Trophy,
-  Brain,
-  Lightbulb,
-  FileBarChart,
   UserRound,
   Sparkles,
-  PanelsTopLeft,
   CheckCircle2,
+  Target,
+  ShieldCheck,
+  Briefcase
 } from "lucide-react";
 import Modal from "./components/Modal";
 import { type FlowKind } from "./components/FlowDiagram";
 
-// Atualize estes campos para cada nova proposta
+// Configurações da Proposta
 const preparedFor = "Dr. Maurício Ernesto";
 const proposalDate = "Outubro 2025";
 
@@ -44,59 +41,21 @@ const ModalContentFallback = () => (
   </div>
 );
 
-const RoiModalLazy = dynamic<{ preparedFor: string }>(
-  () => import("./components/modal-content/RoiModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
+// Lazy Imports dos Modais
+const RoiModalLazy = dynamic<{ preparedFor: string }>(() => import("./components/modal-content/RoiModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const CRMModalLazy = dynamic(() => import("./components/modal-content/CRMModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const DashboardModalLazy = dynamic(() => import("./components/modal-content/DashboardModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const PhaseDetailModalLazy = dynamic<{ phase: 1 | 2 | 3 | 4 }>(() => import("./components/modal-content/PhaseDetailModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const ConquistasModalLazy = dynamic(() => import("./components/modal-content/ConquistasModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const InteligenciaModalLazy = dynamic(() => import("./components/modal-content/InteligenciaModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const InsightsModalLazy = dynamic(() => import("./components/modal-content/InsightsModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const RelatoriosModalLazy = dynamic(() => import("./components/modal-content/RelatoriosModalContentDoc"), { ssr: false, loading: () => <ModalContentFallback /> });
+const EtapaModalLazy = dynamic<{ etapa: 1 | 2 | 3 | 4 }>(() => import("./components/modal-content/EtapaModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
 
-const CRMModalLazy = dynamic(
-  () => import("./components/modal-content/CRMModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const DashboardModalLazy = dynamic(
-  () => import("./components/modal-content/DashboardModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const PhaseDetailModalLazy = dynamic<{ phase: 1 | 2 | 3 | 4 }>(
-  () => import("./components/modal-content/PhaseDetailModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const ConquistasModalLazy = dynamic(
-  () => import("./components/modal-content/ConquistasModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const InteligenciaModalLazy = dynamic(
-  () => import("./components/modal-content/InteligenciaModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const InsightsModalLazy = dynamic(
-  () => import("./components/modal-content/InsightsModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const RelatoriosModalLazy = dynamic(
-  () => import("./components/modal-content/RelatoriosModalContentDoc"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const EtapaModalLazy = dynamic<{ etapa: 1 | 2 | 3 | 4 }>(
-  () => import("./components/modal-content/EtapaModalContent"),
-  { ssr: false, loading: () => <ModalContentFallback /> }
-);
-
-const etapaTitles: Record<1 | 2 | 3 | 4, string> = {
-  1: "Recepção",
-  2: "Agente SDR",
-  3: "Triagem",
-  4: "Atendimento",
+const getEtapaTitle = (etapa: 1 | 2 | 3 | 4) => {
+  const titles = { 1: "Recepção", 2: "Agente SDR", 3: "Triagem", 4: "Atendimento" };
+  return titles[etapa];
 };
-
-const getEtapaTitle = (etapa: 1 | 2 | 3 | 4) => etapaTitles[etapa];
 
 type ModalKind =
   | { type: "solution"; kind: FlowKind; title: string }
@@ -115,657 +74,365 @@ type ModalKind =
 export default function Home() {
   const [modal, setModal] = useState<ModalKind>(null);
 
-  // soluções listadas diretamente nas seções (sem uso aqui)
-
   return (
-    <div className="min-h-screen">
-      {/* Top nav for smooth anchors */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-100">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-6">
+    <div className="min-h-screen font-sans text-slate-900">
+      {/* HEADER / NAV */}
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-200 shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Image src="/branding/logo.svg" alt={`Logo ${preparedFor}`} width={120} height={40} />
+            <Image src="/branding/logo.svg" alt={`Logo ${preparedFor}`} width={140} height={48} className="h-10 w-auto" />
           </div>
-          <nav className="ml-auto hidden md:flex items-center gap-6 text-sm">
-            <a className="hover:text-prime" href="#quem-somos">Quem Somos</a>
-            <a className="hover:text-prime" href="#desafio">Desafio</a>
-            <a className="hover:text-prime" href="#solucoes">Soluções</a>
-            <a className="hover:text-prime" href="#fluxos">Fluxos</a>
-            <a className="hover:text-prime" href="#plano">Plano</a>
-            <a className="hover:text-prime" href="#ganhos">Ganhos</a>
-            <a className="hover:text-prime" href="#investimento">Investimento</a>
-            <a className="hover:text-prime" href="#cta">Próximos passos</a>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+            <a className="hover:text-prime transition-colors" href="#diagnostico">Diagnóstico</a>
+            <a className="hover:text-prime transition-colors" href="#solucoes">Soluções</a>
+            <a className="hover:text-prime transition-colors" href="#entregaveis">Entregáveis</a>
+            <a className="hover:text-prime transition-colors" href="#investimento">Investimento</a>
+            <a className="btn-primary py-2 px-4 text-xs" href="#cta">Aprovar Proposta</a>
           </nav>
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="section bg-gradient-to-b from-white to-slate-50" id="hero">
-        <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-2 gap-10 items-center">
+      {/* HERO SECTION - Assertivo e Profissional */}
+      <section className="section relative overflow-hidden bg-[#041e42] text-white py-20 md:py-28" id="hero">
+        <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] opacity-10"></div>
+        <div className="mx-auto max-w-7xl px-4 relative z-10 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="hero-kicker">PROPOSTA DE SOLUÇÃO COM IA</span>
-            <h1 className="mt-3 text-5xl md:text-7xl font-bold text-prime leading-tight">
-              Agentes de IA para Atendimento Comercial
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6">
+              <Target className="w-3 h-3" /> Plano de Expansão Comercial
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+              Agentes Inteligentes & <span className="text-prime-accent">Gestão Unificada</span>
             </h1>
-            <p className="subtitle mt-4">
-              Automação ponta a ponta para captação, agendamento, confirmação, follow-up e
-              inteligência comercial.
+            <p className="text-lg text-slate-300 leading-relaxed max-w-xl">
+              Solução tecnológica para centralizar o atendimento, qualificar os 150 leads diários e integrar a agenda Tasy ao fluxo particular.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <span className="badge">Preparado para: {preparedFor}</span>
-              <span className="badge">Data: {proposalDate}</span>
-            </div>
-            {/* Botões removidos conforme ajustes */}
-          </div>
-          <div className="flex justify-center">
-            <Image src="/branding/logo.svg" width={420} height={150} alt={`Logo ${preparedFor}`} className="drop-shadow-md" />
-          </div>
-        </div>
-      </section>
-
-      {/* QUEM SOMOS NÓS */}
-      <section className="section bg-white" id="quem-somos">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">
-            Quem é a <span className="text-prime-accent">Convert.AI</span>?
-          </h2>
-          <div className="mt-4 h-1 w-20 bg-prime-accent rounded-full"></div>
-          
-          <div className="mt-10 card">
-            <h3 className="text-xl md:text-2xl font-bold text-prime mb-6">Nossa História</h3>
             
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="text-slate-700 leading-relaxed">
-                <p>
-                  Somos uma <span className="font-semibold text-prime-accent">agência especializada em tráfego pago</span> para{" "}
-                  <span className="font-semibold text-prime-accent">clínicas médicas</span> há mais de 6 anos, com expertise comprovada em performance e crescimento no setor de saúde.
-                </p>
-              </div>
-              
-              <div className="text-slate-700 leading-relaxed">
-                <p>
-                  Durante nossa jornada, identificamos que um <span className="font-semibold text-prime-accent">atendimento deficitário</span> impactava drasticamente as{" "}
-                  <span className="font-semibold text-prime-accent">conversões finais</span>, mesmo com campanhas de alta performance. Com o advento dos{" "}
-                  <span className="font-semibold text-prime-accent">Agentes de IA</span>, unimos expertise em marketing médico com tecnologia de IA, criando soluções específicas para nossos clientes.
-                </p>
-              </div>
+            <div className="mt-8 flex flex-wrap gap-4">
+               <div className="flex flex-col border-l-2 border-prime-accent pl-4">
+                  <span className="text-xs text-slate-400 uppercase tracking-wider">Cliente</span>
+                  <span className="font-semibold text-white">{preparedFor}</span>
+               </div>
+               <div className="flex flex-col border-l-2 border-slate-600 pl-4">
+                  <span className="text-xs text-slate-400 uppercase tracking-wider">Validade</span>
+                  <span className="font-semibold text-white">{proposalDate}</span>
+               </div>
             </div>
           </div>
+          <div className="relative hidden md:block">
+            <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl">
+                <h3 className="text-white font-semibold mb-4 border-b border-white/10 pb-2">Objetivos do Projeto</h3>
+                <ul className="space-y-4 text-sm text-slate-300">
+                    <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-400 h-5 w-5" />
+                        <span>Atendimento imediato (Tempo de resposta &lt; 1min)</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-400 h-5 w-5" />
+                        <span>Qualificação automática de convênios</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-400 h-5 w-5" />
+                        <span>Redução da taxa de No-Show</span>
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <div className="mt-6 card bg-gradient-to-r from-prime-accent/10 to-prime/5 border-prime-accent/30">
-            <p className="text-center text-lg md:text-xl font-semibold text-slate-800">
-              <span className="text-prime-accent">Expertise em Marketing</span> +{" "}
-              <span className="text-prime-accent">Tecnologia de IA</span> ={" "}
-              <span className="text-prime-accent">Resultados</span>
+      {/* DIAGNÓSTICO - Foco em Oportunidade de Melhoria */}
+      <section className="section bg-slate-50" id="diagnostico">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="max-w-3xl">
+            <h2 className="section-title">Diagnóstico Operacional</h2>
+            <p className="subtitle mt-4 text-slate-600">
+              Identificamos os principais pontos de fricção que impedem o consultório de escalar sua eficiência comercial hoje.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* (Plano de Implantação movido para após Ganhos) */}
-
-      {/* DESAFIO ATUAL */}
-      <section className="section" id="desafio">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Desafio Atual</h2>
-          <p className="subtitle mt-2">Contexto do consultório do {preparedFor}: alto volume de leads, agendas desconectadas e baixa visibilidade comercial.</p>
-
-          <div className="mt-10 grid md:grid-cols-2 gap-6">
-            <div className="card">
-              <h3 className="text-xl font-semibold text-prime">Alto volume sem qualificação</h3>
-              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
-                <li>~150 leads/dia; 1 lead a cada 3,2 min</li>
-                <li>Qualificação básica consome 80% do tempo</li>
-                <li>Falta priorização por urgência/aderência</li>
-              </ul>
-            </div>
-            <div className="card">
-              <h3 className="text-xl font-semibold text-prime">Agendas desconectadas</h3>
-              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
-                <li>Hospital IOP (Tasy) vs agenda particular</li>
-                <li>Conflitos e sobreposições</li>
-                <li>Dificuldade de encaixes e remarcações</li>
-              </ul>
-            </div>
-            <div className="card">
-              <h3 className="text-xl font-semibold text-prime">Zero visibilidade comercial</h3>
-              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
-                <li>Não mede taxa de qualificação/conversão</li>
-                <li>Gargalos desconhecidos no funil</li>
-                <li>Sem previsão de no-show</li>
-              </ul>
-            </div>
-            <div className="card">
-              <h3 className="text-xl font-semibold text-prime">Tempo de resposta e follow-up</h3>
-              <ul className="mt-3 space-y-1 text-slate-700 list-disc list-inside pl-1">
-                <li>Leads fora do horário se perdem</li>
-                <li>Falta follow-up estruturado</li>
-                <li>Leads qualificados esfriam sem ação</li>
-              </ul>
-            </div>
+          <div className="mt-10 grid md:grid-cols-4 gap-6">
+            {[
+                { title: "Volume x Capacidade", desc: "O volume de 150 leads/dia supera a capacidade humana de triagem rápida, gerando fila e desistência.", icon: UserRound },
+                { title: "Fragmentação de Agenda", desc: "A falta de integração entre Tasy e Agenda Particular cria risco de overbooking e dificulta encaixes.", icon: CalendarCheck2 },
+                { title: "Gestão de Comparecimento", desc: "O processo manual de confirmação não é suficiente para mitigar o impacto financeiro do No-Show.", icon: BellRing },
+                { title: "Visibilidade de Dados", desc: "Ausência de métricas consolidadas de conversão impede decisões estratégicas baseadas em dados.", icon: BarChart3 }
+            ].map((item, i) => (
+                <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <item.icon className="h-8 w-8 text-prime-accent mb-4" />
+                    <h3 className="font-bold text-slate-900 mb-2">{item.title}</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* SOLUÇÕES (valor) */}
-      <section className="section bg-slate-50" id="solucoes">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Nossas Soluções</h2>
-          <p className="subtitle mt-2">Soluções integradas para qualificar, agendar, reduzir no‑show e dar visibilidade total (CRM + Agenda Unificada + Dashboard).</p>
+      {/* SOLUÇÕES */}
+      <section className="section bg-white" id="solucoes">
+        <div className="mx-auto max-w-7xl px-4">
+          <h2 className="section-title">Arquitetura da Solução</h2>
+          <p className="subtitle mt-2">Implementação de 3 Agentes Especializados + Ecossistema de Gestão.</p>
 
-          <div className="mt-8">
-            <div className="card">
-              <div className="font-bold text-prime">4 soluções para o consultório do {preparedFor}</div>
-            </div>
-            <div className="mt-6 grid md:grid-cols-2 gap-6">
-              <div className="card">
-                <div className="font-semibold text-prime flex items-center gap-2"><CalendarCheck2 className="h-5 w-5"/> SDR Qualificador + Agendamento (WhatsApp)</div>
-                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Atendimento 24/7 com resposta imediata</li>
-                  <li>Qualificação automática (particular × convênio)</li>
-                  <li>Validação de convênios e proposta de horários</li>
-                </ul>
-              </div>
-              <div className="card">
-                <div className="font-semibold text-prime flex items-center gap-2"><MessageSquare className="h-5 w-5"/> FAQ Inteligente (Educacional)</div>
-                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Procedimentos, recuperação e valores/convênios</li>
-                  <li>Sobre o médico, localização e horários</li>
-                  <li>Convida a agendar ao final (conversão)</li>
-                </ul>
-              </div>
-              <div className="card">
-                <div className="font-semibold text-prime flex items-center gap-2"><BellRing className="h-5 w-5"/> Anti No‑Show + Follow‑Up</div>
-                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Lembretes D‑2, D‑1 e D‑2h + confirmação</li>
-                  <li>Reagendamento automático e fila de espera</li>
-                  <li>Follow‑up pós‑consulta (NPS, retornos, exames)</li>
-                </ul>
-              </div>
-              <div className="card">
-                <div className="font-semibold text-prime flex items-center gap-2"><Stethoscope className="h-5 w-5"/> CRM + Agenda Unificada + Dashboard</div>
-                <ul className="mt-2 text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Unifica Hospital IOP (Tasy) + particular</li>
-                  <li>Funis, tags e histórico completo no CRM</li>
-                  <li>KPIs, funil e relatórios executivos</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10 grid md:grid-cols-2 gap-6">
-            <div className="card">
-              <div className="font-semibold text-prime">SOLUÇÕES INTELIGENTES</div>
-              <ul className="mt-3 space-y-2 text-slate-700">
-                <li>✅ Dashboard em tempo real</li>
-                <li>✅ CRM com histórico completo</li>
-                <li>✅ Análise preditiva (prevê problemas)</li>
-                <li>✅ Insights completos com oportunidades</li>
-                <li>✅ Cruzamento de dados entre Marketing Orgânico, Pago, CRM e Fechamento</li>
-                <li>✅ Relatórios executivos</li>
-              </ul>
-              <div className="mt-4 text-slate-600">Gestão baseada em dados, não em achismo.</div>
-              <button className="mt-4 btn-primary" onClick={() => setModal({ type: "valueinfo" })}>Ver mais</button>
-            </div>
-            <div className="card">
-              <div className="font-semibold text-prime">CONFIABILIDADE E SEGURANÇA</div>
-              <ul className="mt-3 space-y-4 text-slate-700 list-disc list-inside pl-1">
-                <li>Fallback: humanos assumem quando necessário.</li>
-                <li>Monitoramento (alertas em tempo real, playbook e reprocessamento).</li>
-                <li>Privacidade &amp; LGPD</li>
-                <li>Segurança dos dados de ponta a ponta</li>
-                <li>Suporte (com SLA pré-definido).</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FLUXO E FERRAMENTAS */}
-      <section className="section" id="fluxos">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Fluxo e Ferramentas Inteligentes</h2>
-          <p className="subtitle mt-2">Fluxograma dos agentes e exemplos das ferramentas</p>
-          <h3 className="mt-8 font-bold text-prime">AGENTES DE IA</h3>
-
-          {/* Quadro de Etapas (layout atualizado) */}
-          <div className="mt-6 rounded-2xl border border-slate-100 bg-white shadow-sm ring-1 ring-slate-100/60">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-              {[
-                {
-                  etapa: 1,
-                  title: "Recepção",
-                  description: "Paciente envia mensagem",
-                  icon: <UserRound className="h-5 w-5" />,
-                },
-                {
-                  etapa: 2,
-                  title: "Agente SDR",
-                  description: "Identifica a necessidade",
-                  icon: <Sparkles className="h-5 w-5" />,
-                },
-                {
-                  etapa: 3,
-                  title: "Triagem",
-                  description: "Encaminha para subfunil",
-                  icon: <PanelsTopLeft className="h-5 w-5" />,
-                },
-                {
-                  etapa: 4,
-                  title: "Atendimento",
-                  description: "Resolve ou agenda",
-                  icon: <CheckCircle2 className="h-5 w-5" />,
-                },
-              ].map((item) => (
-                <div key={item.etapa} className="p-6 lg:p-8 flex flex-col items-start text-left">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-prime-accent/15 border border-prime-accent/30 text-prime flex items-center justify-center">
-                      {item.icon}
+          <div className="mt-12 grid md:grid-cols-3 gap-8">
+             {/* Card 1 */}
+             <div className="card group cursor-pointer hover:border-prime transition-all" onClick={() => setModal({ type: "solution", kind: "agendamento", title: "SDR & Agendamento" })}>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                        <Sparkles className="h-5 w-5" />
                     </div>
-                    <span className="text-sm font-semibold text-prime">Etapa {item.etapa}</span>
-                  </div>
-                  <h4 className="mt-3 text-xl font-extrabold text-slate-900">{item.title}</h4>
-                  <p className="mt-1 text-slate-600 text-sm">{item.description}</p>
-                  <button
-                    onClick={() => setModal({ type: "etapa", etapa: item.etapa as 1 | 2 | 3 | 4 })}
-                    className="mt-4 text-sm font-semibold text-prime underline decoration-2 underline-offset-4 hover:text-prime-accent"
-                  >
-                    Ver mais
-                  </button>
+                    <span className="text-xs font-bold text-prime-accent uppercase tracking-wider group-hover:underline">Ver Fluxo</span>
                 </div>
-              ))}
-            </div>
+                <h3 className="font-bold text-lg text-slate-900">1. SDR & Agendamento</h3>
+                <p className="text-sm text-slate-600 mt-2">Recepciona o paciente, identifica convênio ou particular e realiza o agendamento integrado.</p>
+             </div>
+
+              {/* Card 2 */}
+              <div className="card group cursor-pointer hover:border-prime transition-all" onClick={() => setModal({ type: "solution", kind: "faq", title: "FAQ Educacional" })}>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
+                        <MessageSquare className="h-5 w-5" />
+                    </div>
+                    <span className="text-xs font-bold text-prime-accent uppercase tracking-wider group-hover:underline">Ver Fluxo</span>
+                </div>
+                <h3 className="font-bold text-lg text-slate-900">2. FAQ Inteligente</h3>
+                <p className="text-sm text-slate-600 mt-2">Base de conhecimento treinada para tirar dúvidas de preparo, valores e localização instantaneamente.</p>
+             </div>
+
+              {/* Card 3 */}
+              <div className="card group cursor-pointer hover:border-prime transition-all" onClick={() => setModal({ type: "solution", kind: "triagem-noshow", title: "Anti No-Show" })}>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center">
+                        <BellRing className="h-5 w-5" />
+                    </div>
+                    <span className="text-xs font-bold text-prime-accent uppercase tracking-wider group-hover:underline">Ver Fluxo</span>
+                </div>
+                <h3 className="font-bold text-lg text-slate-900">3. Gestão de No-Show</h3>
+                <p className="text-sm text-slate-600 mt-2">Automação de confirmações (D-2, D-1) e gestão ativa de fila de espera para preencher lacunas.</p>
+             </div>
           </div>
 
-          <div className="mt-4 grid md:grid-cols-3 gap-6">
-            {[
-              { key: "agendamento" as FlowKind, title: "SDR Qualificador + Agendamento" },
-              { key: "faq" as FlowKind, title: "FAQ Inteligente (Educacional)" },
-              { key: "triagem-noshow" as FlowKind, title: "Anti No‑Show + Follow‑Up" },
-            ].map((s) => (
-              <div key={s.key} className="card flex flex-col justify-between">
-                <div className="font-semibold text-prime">{s.title}</div>
-                <button className="mt-4 btn-primary" onClick={() => setModal({ type: "solution", kind: s.key, title: s.title })}>Ver fluxo</button>
-              </div>
-            ))}
-          </div>
-
-          <h3 className="mt-10 font-bold text-prime">FERRAMENTAS</h3>
-          <div className="mt-4 grid md:grid-cols-2 gap-6">
-            <div className="card flex flex-col justify-between">
-              <div>
-                <div className="font-semibold text-prime flex items-center gap-2"><KanbanSquare className="h-5 w-5"/> CRM Comercial</div>
-                <div className="mt-2 text-slate-700 text-sm">Funis com estágios, histórico de conversas, tags por procedimento e origem do lead</div>
-              </div>
-              <button className="mt-4 btn-primary" onClick={() => setModal({ type: "crm" })}>Ver exemplo</button>
-            </div>
-            <div className="card flex flex-col justify-between">
-              <div>
-                <div className="font-semibold text-prime flex items-center gap-2"><BarChart3 className="h-5 w-5"/> Dashboard</div>
-                <div className="mt-2 text-slate-700 text-sm">Visão geral, funil completo e agendamentos com KPIs e previsões de no‑show</div>
-              </div>
-              <button className="mt-4 btn-primary" onClick={() => setModal({ type: "dashboard" })}>Ver exemplo</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PLANO DE IMPLANTAÇÃO */}
-      <section className="section bg-slate-50" id="plano">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Plano de Implantação</h2>
-          <p className="subtitle mt-2">Do mapeamento à implementação: 4 fases estruturadas</p>
-
-      <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { phase: 1, title: "Imersão e Arquitetura", icon: "🔍" },
-          { phase: 2, title: "Desenvolvimento dos Agentes", icon: "⚙️" },
-          { phase: 3, title: "Integrações e Painéis", icon: "🔗" },
-          { phase: 4, title: "Testes e Go-Live", icon: "🚀" },
-        ].map((item) => (
-          <button
-            key={item.phase}
-            type="button"
-            className="card hover:shadow-md transition-shadow text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-prime"
-            onClick={() => setModal({ type: "phases", phase: item.phase as 1 | 2 | 3 | 4 })}
-          >
-            <div className="text-2xl md:text-3xl mb-2" aria-hidden>
-              {item.icon}
-            </div>
-            <div className="text-base md:text-lg font-semibold text-prime mb-1">FASE {item.phase}</div>
-            <h3 className="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
-            <div className="text-prime text-sm font-semibold group-hover:underline">Ver detalhes →</div>
-          </button>
-        ))}
-      </div>
-      <div className="mt-4 text-base text-slate-600">As estimativas podem ser alteradas de acordo com a complexidade dos fluxos demandados pelo cliente</div>
-        </div>
-      </section>
-
-      {/* GANHOS (quatro cartões) */}
-      <section className="section" id="ganhos">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Ganhos Esperados</h2>
-          <p className="subtitle mt-2">Resultados concretos e mensuráveis para {preparedFor}</p>
-
-          <div className="mt-10 grid md:grid-cols-2 gap-6">
-            {/* Cartão 1: O que você conquista */}
-            <div className="card hover:shadow-md transition-shadow">
-              <div className="text-xl md:text-2xl font-bold text-prime mb-2 flex items-center gap-2"><Trophy className="h-5 w-5 text-prime"/> O que você conquista</div>
-              <div className="text-slate-700 space-y-2 mb-4">
-                <div>🕘 Atendimento 24/7 no WhatsApp — sem perda de leads fora do horário</div>
-                <div>🤖 Qualificação e FAQ automatizados — recepção foca no que importa</div>
-                <div>📅 Agenda unificada (IOP Tasy + particular) — menos conflitos e encaixes rápidos</div>
-                <div>🔔 Confirmações e reagendamentos automáticos — redução de faltas e ocupação melhor</div>
-                <div>🔄 Follow‑up estruturado — retornos/exames e acompanhamento pós‑procedimento</div>
-              </div>
-              <button className="btn-primary" onClick={() => setModal({ type: "conquistas" })}>Ver todos os ganhos →</button>
-            </div>
-
-            {/* Cartão 2: Inteligência em tempo real */}
-            <div className="card hover:shadow-md transition-shadow">
-              <div className="text-xl md:text-2xl font-bold text-prime mb-2 flex items-center gap-2"><Brain className="h-5 w-5 text-prime"/> Inteligência em tempo real</div>
-              <div className="text-slate-700 space-y-2 mb-4">
-                <div>📊 Taxa de conversão de leads</div>
-                <div>🎯 Especialidades mais procuradas</div>
-                <div>⚠️ Previsão de no-show</div>
-              </div>
-              <button className="btn-primary" onClick={() => setModal({ type: "inteligencia" })}>Ver análises completas →</button>
-            </div>
-
-            {/* Cartão 3: Exemplos de insights */}
-            <div className="card hover:shadow-md transition-shadow">
-              <div className="text-xl md:text-2xl font-bold text-prime mb-2 flex items-center gap-2"><Lightbulb className="h-5 w-5 text-prime"/> Exemplos de insights</div>
-              <div className="text-slate-700 text-sm space-y-2 mb-4">
-                <div>💡 &quot;35% dos leads chegam no domingo, mas conversão 20% menor → Bot responde na hora&quot;</div>
-                <div>💡 &quot;18 orçamentos de cirurgia, só 4 fecharam por preço → Criar parcelamento 6x&quot;</div>
-              </div>
-              <button className="btn-primary" onClick={() => setModal({ type: "insights" })}>Ver mais insights →</button>
-            </div>
-
-            {/* Cartão 4: Relatórios avançados */}
-            <div className="card hover:shadow-md transition-shadow">
-              <div className="text-xl md:text-2xl font-bold text-prime mb-2 flex items-center gap-2"><FileBarChart className="h-5 w-5 text-prime"/> Relatórios avançados</div>
-              <div className="text-slate-700 space-y-2 mb-4">
-                <div>🔗 Cruzamento multicanal completo</div>
-                <div>🎯 Clusterização de pacientes por perfil</div>
-                <div>📊 Jornada do paciente ponta a ponta</div>
-              </div>
-              <button className="btn-primary" onClick={() => setModal({ type: "relatorios" })}>Ver relatórios →</button>
-            </div>
+          {/* Ferramentas de Gestão */}
+          <div className="mt-8 bg-slate-50 rounded-2xl p-8 border border-slate-200">
+             <h3 className="font-bold text-slate-900 mb-6 flex items-center gap-2">
+                <KanbanSquare className="text-prime" /> Ferramentas de Controle
+             </h3>
+             <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">CRM Integrado</h4>
+                    <p className="text-sm text-slate-600 mb-4">Visualização clara do funil de vendas, com status de cada paciente e histórico de conversas.</p>
+                    <button onClick={() => setModal({ type: "crm" })} className="text-sm font-bold text-prime hover:underline">Abrir Demonstração CRM →</button>
+                </div>
+                <div>
+                    <h4 className="font-semibold text-slate-800 mb-2">Dashboard Executivo</h4>
+                    <p className="text-sm text-slate-600 mb-4">Acompanhamento em tempo real de KPIs: Taxa de conversão, Faturamento projetado e Eficiência dos canais.</p>
+                    <button onClick={() => setModal({ type: "dashboard" })} className="text-sm font-bold text-prime hover:underline">Abrir Demonstração Dashboard →</button>
+                </div>
+             </div>
           </div>
         </div>
       </section>
 
-      {/* CALCULADORA DE ROI */}
-      <section className="section bg-gradient-to-r from-white via-slate-50 to-emerald-50" id="roi">
+      {/* GANHOS ESPERADOS - Simplificado */}
+      <section className="section bg-white" id="ganhos">
+         <div className="mx-auto max-w-7xl px-4">
+             <h2 className="section-title">Ganhos Esperados</h2>
+             <p className="subtitle mt-2">Impacto direto nos indicadores chave do consultório.</p>
+
+             <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="p-5 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <div className="text-3xl font-bold text-emerald-600 mb-2">+40%</div>
+                    <div className="font-semibold text-emerald-900">Conversão de Leads</div>
+                    <p className="text-xs text-emerald-800 mt-1">Resposta imediata aumenta drásticamente o aproveitamento.</p>
+                </div>
+                <div className="p-5 bg-blue-50 rounded-xl border border-blue-100">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">-60%</div>
+                    <div className="font-semibold text-blue-900">Taxa de No-Show</div>
+                    <p className="text-xs text-blue-800 mt-1">Confirmações multicanal e fila de espera ativa.</p>
+                </div>
+                <div className="p-5 bg-indigo-50 rounded-xl border border-indigo-100">
+                    <div className="text-3xl font-bold text-indigo-600 mb-2">24h</div>
+                    <div className="font-semibold text-indigo-900">Operação Comercial</div>
+                    <p className="text-xs text-indigo-800 mt-1">Captura de pacientes noturnos e finais de semana.</p>
+                </div>
+                <div className="p-5 bg-slate-50 rounded-xl border border-slate-200">
+                    <div className="text-3xl font-bold text-slate-600 mb-2">100%</div>
+                    <div className="font-semibold text-slate-900">Visibilidade</div>
+                    <p className="text-xs text-slate-600 mt-1">Dados estruturados para tomada de decisão.</p>
+                </div>
+             </div>
+
+             <div className="mt-8 flex flex-wrap gap-4 justify-center">
+                <button onClick={() => setModal({ type: "conquistas" })} className="btn-secondary text-sm">Detalhar Ganhos Operacionais</button>
+                <button onClick={() => setModal({ type: "inteligencia" })} className="btn-secondary text-sm">Ver Inteligência de Dados</button>
+             </div>
+         </div>
+      </section>
+
+      {/* NOVA SEÇÃO: ENTREGÁVEIS (Tangibilização) */}
+      <section className="section bg-slate-50 border-y border-slate-200" id="entregaveis">
         <div className="mx-auto max-w-6xl px-4">
-          <div className="card flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-6 bg-white/90 backdrop-blur">
-            <div>
-              <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide">Simule o impacto financeiro</div>
-              <h3 className="text-2xl md:text-3xl font-bold text-prime mt-1">Calculadora de ROI</h3>
-              <p className="text-slate-600 mt-2 max-w-2xl text-sm md:text-base">
-                Compare ganhos por aumento de faturamento ou redução de custos de equipe, considerando um investimento fixo de R$ 30.000 para implementação completa.
-              </p>
+            <h2 className="section-title mb-8">O Que Será Entregue</h2>
+            <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 className="text-lg font-bold text-prime mb-4 flex items-center gap-2">
+                        <Briefcase className="h-5 w-5" /> Setup Tecnológico
+                    </h3>
+                    <ul className="space-y-3">
+                        <li className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-100">
+                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+                            <div className="text-sm text-slate-700"><strong>Configuração dos Agentes:</strong> Desenvolvimento e treino dos 3 fluxos (SDR, FAQ, No-Show) com a base de conhecimento do Dr.</div>
+                        </li>
+                        <li className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-100">
+                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+                            <div className="text-sm text-slate-700"><strong>Integração Tasy:</strong> Conector seguro para leitura e escrita na agenda oficial do hospital/clínica.</div>
+                        </li>
+                        <li className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-100">
+                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+                            <div className="text-sm text-slate-700"><strong>Painel de Controle:</strong> Setup do CRM e Dashboard com as métricas definidas no diagnóstico.</div>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 className="text-lg font-bold text-prime mb-4 flex items-center gap-2">
+                        <ShieldCheck className="h-5 w-5" /> Serviços & Garantias
+                    </h3>
+                    <ul className="space-y-3">
+                        <li className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-100">
+                            <CheckCircle2 className="h-5 w-5 text-blue-500 shrink-0" />
+                            <div className="text-sm text-slate-700"><strong>Treinamento da Equipe:</strong> Workshop de 4h para secretárias sobre como operar o CRM e interagir com a IA.</div>
+                        </li>
+                        <li className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-100">
+                            <CheckCircle2 className="h-5 w-5 text-blue-500 shrink-0" />
+                            <div className="text-sm text-slate-700"><strong>Acompanhamento Assistido:</strong> 30 dias de monitoramento intensivo pós-Go-Live para ajustes finos.</div>
+                        </li>
+                        <li className="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-100">
+                            <CheckCircle2 className="h-5 w-5 text-blue-500 shrink-0" />
+                            <div className="text-sm text-slate-700"><strong>Garantia de Performance:</strong> SLA de estabilidade e suporte técnico prioritário.</div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <button className="btn-primary w-full md:w-auto px-6 py-3 text-base" onClick={() => setModal({ type: "roi" })}>
-              Calcular ROI
+        </div>
+      </section>
+
+      {/* CALCULADORA ROI */}
+      <section className="py-16 bg-white" id="roi">
+        <div className="mx-auto max-w-5xl px-4 text-center">
+           <h2 className="section-title">Viabilidade Financeira</h2>
+           <p className="text-slate-600 mt-4 max-w-2xl mx-auto">
+             Utilize nossa calculadora para projetar o retorno sobre o investimento com base na recuperação de leads e redução de custos operacionais.
+           </p>
+           <div className="mt-8">
+            <button 
+                onClick={() => setModal({ type: "roi" })}
+                className="btn-primary px-8 py-3 shadow-lg shadow-prime/20"
+            >
+                Abrir Calculadora de ROI
             </button>
-          </div>
+           </div>
         </div>
       </section>
 
-      {/* INVESTIMENTO - adaptado ao documento de arquitetura */}
-      <section className="section" id="investimento">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Investimento</h2>
-          <p className="subtitle mt-2">Soluções Modulares ou Pacote Completo</p>
+      {/* INVESTIMENTO */}
+      <section className="section bg-slate-50" id="investimento">
+         <div className="mx-auto max-w-5xl px-4">
+            <h2 className="section-title text-center">Proposta Comercial</h2>
+            
+            <div className="mt-10 flex justify-center">
+                {/* Opção Full (Foco Único para simplificar e ser assertivo) */}
+                <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                    <div className="bg-prime text-white p-6 text-center">
+                        <h3 className="text-2xl font-bold">Projeto Completo</h3>
+                        <p className="text-slate-300 text-sm">Transformação Digital Dr. Maurício Ernesto</p>
+                    </div>
+                    <div className="p-8">
+                        <div className="flex items-baseline justify-center gap-2 mb-2">
+                            <span className="text-sm text-slate-400 line-through">R$ 40.000</span>
+                            <span className="text-4xl font-extrabold text-slate-900">R$ 25.000</span>
+                        </div>
+                        <p className="text-center text-slate-500 text-sm font-medium uppercase tracking-wide mb-8">Investimento Único (Setup)</p>
+                        
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 className="h-4 w-4" /></div>
+                                <span className="text-slate-700 text-sm">Todos os 3 Agentes (SDR, FAQ, No-Show)</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 className="h-4 w-4" /></div>
+                                <span className="text-slate-700 text-sm">Integração Completa Tasy + CRM</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 className="h-4 w-4" /></div>
+                                <span className="text-slate-700 text-sm">Treinamento e Suporte Assistido (30 dias)</span>
+                            </div>
+                        </div>
 
-          {/* Linha superior (modelo1): 3 cards com destaque no centro */}
-          <div className="mt-8 grid md:grid-cols-3 gap-6 items-stretch">
-            {/* Esquerda - FAQ Inteligente */}
-            <div className="card flex flex-col">
-              <div className="text-prime font-bold">FAQ Inteligente</div>
-              <div className="mt-3 text-slate-800 space-y-2">
-                <div>
-                  <div className="text-slate-600 text-sm">Investimento Único (Setup + Dev)</div>
-                  <div className="text-xl font-bold">R$ 10.000,00</div>
-                </div>
-                <div>
-                  <div className="text-slate-600 text-sm">Mensalidade</div>
-                  <div className="text-lg font-semibold">R$ 800,00/mês</div>
-                </div>
-                <ul className="mt-2 text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Agente FAQ especialista</li>
-                  <li>Base de conhecimento completa</li>
-                  <li>Integração com WhatsApp</li>
-                  <li>Métricas de conversão FAQ→Lead</li>
-                </ul>
-              </div>
-              <div className="mt-6 h-px bg-slate-200" />
-            </div>
+                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-8 text-center">
+                            <p className="text-xs text-slate-500 font-semibold uppercase">Mensalidade (Manutenção + Servidores)</p>
+                            <p className="text-xl font-bold text-slate-800">R$ 2.500<span className="text-sm font-normal text-slate-500">/mês</span></p>
+                            <p className="text-xs text-slate-400 mt-1">*Inicia apenas após o Go-Live</p>
+                        </div>
 
-            {/* Centro - destaque (SDR Qualificador + Agendamento) */}
-            <div className="card flex flex-col ring-2 ring-prime shadow-lg md:-mt-3">
-              <div className="text-prime font-extrabold">SDR Qualificador + Agendamento</div>
-              <div className="mt-3 text-slate-800 space-y-2">
-                <div>
-                  <div className="text-slate-600 text-sm">Investimento Único (Setup + Dev)</div>
-                  <div className="text-2xl font-extrabold">R$ 20.000,00</div>
+                        <a href="#cta" className="block w-full py-4 bg-emerald-600 text-white font-bold text-center rounded-lg hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20">
+                            Aprovar Projeto
+                        </a>
+                    </div>
                 </div>
-                <div>
-                  <div className="text-slate-600 text-sm">Mensalidade</div>
-                  <div className="text-xl font-bold">R$ 2.200,00/mês</div>
-                </div>
-                <ul className="mt-2 text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Agente Orquestrador + SDR (Particular/Convênio)</li>
-                  <li>Validação de convênios</li>
-                  <li>Integração Omnichannel + CRM</li>
-                  <li>Dashboard essencial</li>
-                </ul>
-              </div>
-              <div className="mt-6 h-px bg-slate-200" />
             </div>
-
-            {/* Direita - Anti No‑Show */}
-            <div className="card flex flex-col">
-              <div className="text-prime font-bold">Anti No‑Show</div>
-              <div className="mt-3 text-slate-800 space-y-2">
-                <div>
-                  <div className="text-slate-600 text-sm">Investimento Único (Setup + Dev)</div>
-                  <div className="text-xl font-bold">R$ 10.000,00</div>
-                </div>
-                <div>
-                  <div className="text-slate-600 text-sm">Mensalidade</div>
-                  <div className="text-lg font-semibold">R$ 1.000,00/mês</div>
-                </div>
-                <ul className="mt-2 text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
-                  <li>Confirmações D‑2/D‑1/D‑2h</li>
-                  <li>Reagendamento inteligente + fila de espera</li>
-                  <li>Follow‑up pós‑consulta</li>
-                  <li>Integração com CRM + métricas de no‑show</li>
-                </ul>
-              </div>
-              <div className="mt-6 h-px bg-slate-200" />
-            </div>
-          </div>
-
-          {/* Linha inferior (modelo2): 2 cards */}
-          <div className="mt-8 grid md:grid-cols-2 gap-6 items-stretch">
-            {/* Solução completa (Full) */}
-            <div className="card flex flex-col">
-              <div className="text-prime font-bold">Solução Full — Pacote Completo</div>
-              <div className="mt-3 text-slate-800 space-y-2">
-                <div className="text-slate-600 text-sm">Investimento Único</div>
-                <div className="text-2xl font-extrabold">De R$ 40.000 → R$ 25.000</div>
-                <div className="text-slate-600 text-sm">Mensalidade</div>
-                <div className="text-lg font-semibold">De R$ 4.000/mês → R$ 2.500/mês</div>
-                <div className="text-slate-700 text-sm mt-2">Inclui: SDR + FAQ + No‑Show + CRM + Agenda Unificada + Dashboard</div>
-                <div className="mt-3 text-sm text-slate-700">
-                  <div className="font-semibold text-slate-800">Extras</div>
-                  <ul className="mt-2 space-y-1 list-disc list-inside pl-1">
-                    <li>Treinamento (8h) e suporte 60 dias</li>
-                    <li>Acompanhamento mensal (3 meses)</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="mt-6 h-px bg-slate-200" />
-            </div>
-
-            {/* Condições de Pagamento */}
-            <div className="card flex flex-col">
-              <div className="text-prime font-bold">Condições de Pagamento</div>
-              <div className="mt-3 text-slate-800 space-y-3">
-                <div className="text-sm">
-                  <div className="font-semibold text-slate-800">Investimento Único</div>
-                  <ul className="mt-1 space-y-1 text-slate-700 list-disc list-inside pl-1">
-                    <li>À vista (5% de desconto)</li>
-                    <li>5 parcelas de R$ 5.000</li>
-                    <li>3x sem juros (cartão corporativo)</li>
-                  </ul>
-                </div>
-                <div className="text-sm">
-                  <div className="font-semibold text-slate-800">Mensalidade</div>
-                  <ul className="mt-1 space-y-1 text-slate-700 list-disc list-inside pl-1">
-                    <li>Inicia no mês seguinte ao go‑live</li>
-                    <li>Faturamento via boleto ou PIX</li>
-                  </ul>
-                </div>
-                <div className="text-xs text-slate-600">Incluso: Infraestrutura, suporte (SLA 24h úteis), manutenção, segurança, backup e monitoramento 24/7.</div>
-              </div>
-              <div className="mt-6 h-px bg-slate-200" />
-            </div>
-          </div>
-        </div>
+         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section bg-slate-50" id="cta">
-        <div className="mx-auto max-w-6xl px-4">
-          <h2 className="section-title">Próximos Passos</h2>
-          <div className="mt-8 grid md:grid-cols-3 gap-6">
-            {[
-              { title: "Alinhamento Final", desc: "Refinamento dos requisitos e expectativas" },
-              { title: "Aprovação da Proposta", desc: "Formalização do acordo e início do projeto" },
-              { title: "Início do Projeto", desc: "Kick-off e primeiros desenvolvimentos" },
-            ].map((s) => (
-              <div key={s.title} className="card">
-                <h3 className="text-lg font-semibold text-prime">{s.title}</h3>
-                <p className="mt-2 text-slate-700">{s.desc}</p>
-              </div>
-            ))}
-          </div>
+      {/* CTA FINAL */}
+      <section className="section bg-white" id="cta">
+         <div className="mx-auto max-w-4xl px-4 text-center">
+            <h2 className="section-title">Cronograma de Execução</h2>
+            <p className="text-slate-600 mt-4">Próximos passos após a aprovação.</p>
 
-          {/* CTAs removidos */}
-
-        </div>
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-4">
+                {[
+                    { step: 1, title: "Kick-off", desc: "Reunião de alinhamento e acessos" },
+                    { step: 2, title: "Desenvolvimento", desc: "Configuração dos fluxos e integrações" },
+                    { step: 3, title: "Validação", desc: "Testes assistidos com a equipe" },
+                    { step: 4, title: "Go-Live", desc: "Virada de chave oficial" }
+                ].map((s) => (
+                    <div key={s.step} className="p-4 rounded-lg border border-slate-100 bg-slate-50 text-left hover:border-prime-accent/50 transition-colors cursor-pointer" onClick={() => setModal({ type: "phases", phase: s.step as 1|2|3|4 })}>
+                        <span className="text-xs font-bold text-prime-accent uppercase">Fase 0{s.step}</span>
+                        <h4 className="font-bold text-slate-900 mt-1">{s.title}</h4>
+                        <p className="text-xs text-slate-500 mt-2">{s.desc}</p>
+                        <span className="text-xs text-prime mt-2 block font-medium">Ver detalhes →</span>
+                    </div>
+                ))}
+            </div>
+            
+            <div className="mt-16">
+                <button className="btn-primary text-lg px-10 py-4">
+                    Formalizar Contratação
+                </button>
+                <p className="mt-4 text-sm text-slate-400">Dúvidas técnicas? <a href="#" className="text-prime underline">Fale com o especialista</a>.</p>
+            </div>
+         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-100 py-6 text-center text-sm text-slate-500">
-        Convert.AI | Soluções em Automações de IA
+      {/* FOOTER */}
+      <footer className="bg-slate-900 text-slate-400 py-8 text-center text-xs">
+         <div className="mx-auto max-w-7xl px-4">
+            <p>&copy; 2025 Convert.AI - Tecnologia para Clínicas.</p>
+         </div>
       </footer>
 
-      {/* MODALS */}
-      <Modal
-        open={modal?.type === "solution"}
-        onClose={() => setModal(null)}
-        title={(modal && modal.type === "solution" && modal.title) || "Fluxo"}
-        scrollContent={false}
-      >
-        <div className="h-full">
-          {modal && modal.type === "solution" ? (
-            <FlowDiagramLazy kind={modal.kind} />
-          ) : null}
-        </div>
+      {/* MODALS RENDERER */}
+      <Modal open={modal?.type === "solution"} onClose={() => setModal(null)} title={(modal && modal.type === "solution" && modal.title) || "Fluxo"} scrollContent={false}>
+        <div className="h-full">{modal && modal.type === "solution" ? <FlowDiagramLazy kind={modal.kind} /> : null}</div>
       </Modal>
-
-      {/* Modal "Gestão às cegas vs Gestão inteligente" (médio) */}
-      <Modal open={modal?.type === "valueinfo"} onClose={() => setModal(null)} title="Gestão às cegas vs Gestão inteligente" size="md">
-        <div className="p-4 md:p-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="rounded-lg border border-slate-200 p-4 bg-white">
-              <div className="font-bold text-rose-600">SEM VISIBILIDADE</div>
-              <div className="mt-3 text-slate-700 text-sm">Antes de implementar a solução</div>
-              <ul className="mt-3 space-y-1 text-slate-700 text-sm list-disc list-inside pl-1">
-                <li>Conversão: 15%</li>
-                <li>No‑show: 25%</li>
-                <li>Consultas/mês: 675</li>
-                <li>Leads perdidos: ~2.250/mês</li>
-                <li>Receita mensal: R$ 270.000</li>
-              </ul>
-              <div className="mt-3 text-slate-800 text-sm">Decisões: no achismo, reativas, pouca previsibilidade</div>
-            </div>
-            <div className="rounded-lg border border-slate-200 p-4 bg-white">
-              <div className="font-bold text-emerald-600">COM VISIBILIDADE TOTAL</div>
-              <div className="mt-3 text-slate-700 text-sm">Depois de implantar IA + CRM + Dashboard</div>
-              <ul className="mt-3 space-y-1 text-slate-700 text-sm list-disc list-inside pl-1">
-                <li>Conversão: 39% (+160%)</li>
-                <li>No‑show: 10% (−60%)</li>
-                <li>Consultas/mês: 1.750 (+1.075)</li>
-                <li>Leads perdidos: ~810/mês (−64%)</li>
-                <li>Receita mensal: R$ 700.000 (+R$ 430.000)</li>
-              </ul>
-              <div className="mt-3 text-slate-800 text-sm">Decisões: baseadas em dados, proativas, com previsibilidade</div>
-            </div>
-          </div>
-          <div className="mt-4 text-center text-slate-600 text-xs">Números ilustrativos do documento de arquitetura (ajustar conforme dados reais do período).</div>
-        </div>
-      </Modal>
-
-      <Modal
-        open={modal?.type === "roi"}
-        onClose={() => setModal(null)}
-        title="Calculadora de ROI"
-        titleAlign="center"
-        closeLabel="Voltar"
-      >
-        <RoiModalLazy preparedFor={preparedFor} />
-      </Modal>
-
-      <Modal open={modal?.type === "crm"} onClose={() => setModal(null)} title="CRM Comercial">
-        <CRMModalLazy />
-      </Modal>
-
-      <Modal open={modal?.type === "dashboard"} onClose={() => setModal(null)} title="Dashboard">
-        <DashboardModalLazy />
-      </Modal>
-
-      {/* Modal Fases do Projeto */}
-      <Modal
-        open={modal?.type === "phases"}
-        onClose={() => setModal(null)}
-        title={modal?.type === "phases" ? `Fase ${modal.phase}: Detalhamento` : "Fases do Projeto"}
-        size="md"
-      >
-        <PhaseDetailModalLazy phase={modal?.type === "phases" ? modal.phase : 1} />
-      </Modal>
-
-      {/* Modais da Seção Ganhos */}
-      <Modal open={modal?.type === "conquistas"} onClose={() => setModal(null)} title="O Que Você Conquista">
-        <ConquistasModalLazy />
-      </Modal>
-
-      <Modal open={modal?.type === "inteligencia"} onClose={() => setModal(null)} title="Inteligência em Tempo Real">
-        <InteligenciaModalLazy />
-      </Modal>
-
-      <Modal open={modal?.type === "insights"} onClose={() => setModal(null)} title="Exemplos de Insights Acionáveis">
-        <InsightsModalLazy />
-      </Modal>
-
-      <Modal open={modal?.type === "relatorios"} onClose={() => setModal(null)} title="Relatórios Avançados com Cruzamento de Dados">
-        <RelatoriosModalLazy />
-      </Modal>
-
-      {/* Modais das Etapas */}
-      <Modal
-        open={modal?.type === "etapa"}
-        onClose={() => setModal(null)}
-        title={modal?.type === "etapa" ? `Etapa ${modal.etapa} - ${getEtapaTitle(modal.etapa)}` : "Etapa"}
-        size="md"
-      >
-        <EtapaModalLazy etapa={modal?.type === "etapa" ? modal.etapa : 1} />
-      </Modal>
+      <Modal open={modal?.type === "roi"} onClose={() => setModal(null)} title="Simulador de ROI" titleAlign="center" closeLabel="Fechar"> <RoiModalLazy preparedFor={preparedFor} /> </Modal>
+      <Modal open={modal?.type === "crm"} onClose={() => setModal(null)} title="CRM Integrado"> <CRMModalLazy /> </Modal>
+      <Modal open={modal?.type === "dashboard"} onClose={() => setModal(null)} title="Painel Executivo"> <DashboardModalLazy /> </Modal>
+      <Modal open={modal?.type === "phases"} onClose={() => setModal(null)} title={`Fase ${modal?.type === "phases" ? modal.phase : 1}: Detalhamento`} size="md"> <PhaseDetailModalLazy phase={modal?.type === "phases" ? modal.phase : 1} /> </Modal>
+      <Modal open={modal?.type === "conquistas"} onClose={() => setModal(null)} title="Ganhos Operacionais"> <ConquistasModalLazy /> </Modal>
+      <Modal open={modal?.type === "inteligencia"} onClose={() => setModal(null)} title="Inteligência de Dados"> <InteligenciaModalLazy /> </Modal>
+      <Modal open={modal?.type === "insights"} onClose={() => setModal(null)} title="Insights de Negócio"> <InsightsModalLazy /> </Modal>
+      <Modal open={modal?.type === "relatorios"} onClose={() => setModal(null)} title="Relatórios Gerenciais"> <RelatoriosModalLazy /> </Modal>
+      <Modal open={modal?.type === "etapa"} onClose={() => setModal(null)} title={modal?.type === "etapa" ? `Etapa ${modal.etapa} - ${getEtapaTitle(modal.etapa)}` : "Etapa"} size="md"> <EtapaModalLazy etapa={modal?.type === "etapa" ? modal.etapa : 1} /> </Modal>
     </div>
   );
 }
