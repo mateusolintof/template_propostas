@@ -460,7 +460,7 @@ export default function CRMModalContent() {
             <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
               <div className="text-xs font-semibold uppercase text-slate-600">Taxa de Conversão</div>
               <div className="text-2xl font-bold text-emerald-600 mt-1">67,7%</div>
-              <div className="text-xs text-slate-500">Meta: 60% qualificação -> 45% consulta</div>
+              <div className="text-xs text-slate-500">Meta: 60% qualificação para 45% consulta</div>
             </div>
             <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
               <div className="text-xs font-semibold uppercase text-slate-600">Ticket Médio</div>

@@ -60,17 +60,17 @@ export default function DashboardModalContent() {
 
   const gargalosFunil = [
     {
-      titulo: "Lead -> Qualificado",
+      titulo: "Lead para Qualificado",
       detalhe: "40% reprovados por dados incompletos ou sem convênio aceito.",
       acao: "Coleta automática e FAQ para pré-qualificar.",
     },
     {
-      titulo: "Agendado -> Confirmado",
+      titulo: "Agendado para Confirmado",
       detalhe: "Risco de no-show em horários de manhã (8h-10h).",
       acao: "Lembrete + fila de espera com reoferta imediata.",
     },
     {
-      titulo: "Consulta -> Cirurgia",
+      titulo: "Consulta para Cirurgia",
       detalhe: "24 pacientes aguardando retorno do convênio.",
       acao: "Trigger de validação Tasy + call back dedicado.",
     },
@@ -520,7 +520,7 @@ export default function DashboardModalContent() {
                   <h4 className="font-bold text-slate-900">Tendência Positiva</h4>
                 </div>
                 <p className="text-sm text-slate-700 mb-4">
-                  Lesões do joelho aumentaram conversão em 18% (35% -> 53%). Motivo: resposta mais rápida no WhatsApp.
+                  Lesões do joelho aumentaram conversão em 18% (35% para 53%). Motivo: resposta mais rápida no WhatsApp.
                 </p>
                 <div className="bg-teal-50 border border-teal-200 p-3 rounded-lg">
                   <div className="font-semibold text-teal-900 text-sm">💡 Ação sugerida:</div>
