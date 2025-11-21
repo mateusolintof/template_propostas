@@ -335,51 +335,131 @@ export default function Home() {
 
       {/* INVESTIMENTO */}
       <section className="section bg-slate-50" id="investimento">
-         <div className="mx-auto max-w-5xl px-4">
-            <h2 className="section-title text-center">Proposta Comercial</h2>
-            
-            <div className="mt-10 flex justify-center">
-                {/* Opção Full (Foco Único para simplificar e ser assertivo) */}
-                <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-                    <div className="bg-prime text-white p-6 text-center">
-                        <h3 className="text-2xl font-bold">Projeto Completo</h3>
-                        <p className="text-slate-300 text-sm">Transformação Digital Dr. Maurício Ernesto</p>
-                    </div>
-                    <div className="p-8">
-                        <div className="flex items-baseline justify-center gap-2 mb-2">
-                            <span className="text-sm text-slate-400 line-through">R$ 40.000</span>
-                            <span className="text-4xl font-extrabold text-slate-900">R$ 25.000</span>
-                        </div>
-                        <p className="text-center text-slate-500 text-sm font-medium uppercase tracking-wide mb-8">Investimento Único (Setup)</p>
-                        
-                        <div className="space-y-4 mb-8">
-                            <div className="flex items-center gap-3">
-                                <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 className="h-4 w-4" /></div>
-                                <span className="text-slate-700 text-sm">Todos os 3 Agentes (SDR, FAQ, No-Show)</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 className="h-4 w-4" /></div>
-                                <span className="text-slate-700 text-sm">Integração Completa Tasy + CRM</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><CheckCircle2 className="h-4 w-4" /></div>
-                                <span className="text-slate-700 text-sm">Treinamento e Suporte Assistido (30 dias)</span>
-                            </div>
-                        </div>
+        <div className="mx-auto max-w-6xl px-4">
+          <h2 className="section-title text-center">Proposta Comercial</h2>
+          <p className="text-center text-slate-600 mt-3">Escolha um módulo individual ou contrate o ecossistema completo com ancoragem de preço.</p>
 
-                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-8 text-center">
-                            <p className="text-xs text-slate-500 font-semibold uppercase">Mensalidade (Manutenção + Servidores)</p>
-                            <p className="text-xl font-bold text-slate-800">R$ 2.500<span className="text-sm font-normal text-slate-500">/mês</span></p>
-                            <p className="text-xs text-slate-400 mt-1">*Inicia apenas após o Go-Live</p>
-                        </div>
-
-                        <a href="#cta" className="block w-full py-4 bg-emerald-600 text-white font-bold text-center rounded-lg hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20">
-                            Aprovar Projeto
-                        </a>
-                    </div>
+          {/* Linha superior: 3 módulos */}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                titulo: "FAQ Inteligente",
+                setup: "R$ 10.000",
+                mensal: "R$ 800/mês",
+                itens: ["Tira-dúvidas 24/7", "Base de Conhecimento Educacional"],
+                tag: null,
+              },
+              {
+                titulo: "SDR + Agendamento",
+                setup: "R$ 20.000",
+                mensal: "R$ 2.200/mês",
+                itens: ["Qualificação de Leads", "Integração Tasy (Leitura/Escrita)"],
+                tag: "Core / Principal",
+              },
+              {
+                titulo: "Anti No-Show",
+                setup: "R$ 10.000",
+                mensal: "R$ 1.000/mês",
+                itens: ["Confirmação D-2 e D-1", "Gestão de Fila de Espera"],
+                tag: null,
+              },
+            ].map((card) => (
+              <div key={card.titulo} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col">
+                {card.tag && (
+                  <span className="inline-flex w-fit items-center gap-2 rounded-full bg-prime text-white px-3 py-1 text-xs font-semibold mb-3">
+                    {card.tag}
+                  </span>
+                )}
+                <h3 className="text-xl font-bold text-slate-900">{card.titulo}</h3>
+                <div className="mt-4 space-y-1 text-sm text-slate-600">
+                  <div className="font-semibold text-slate-800">Investimento Único (Setup): <span className="text-prime">{card.setup}</span></div>
+                  <div className="font-semibold text-slate-800">Mensalidade: <span className="text-prime">{card.mensal}</span></div>
                 </div>
+                <ul className="mt-4 space-y-2 text-sm text-slate-700">
+                  {card.itens.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Linha inferior: pacote full + condições */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="md:col-span-3 bg-white rounded-2xl border-2 border-prime-accent shadow-lg shadow-prime/10 p-6 relative overflow-hidden">
+              <div className="absolute top-4 right-4 inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-100">
+                Melhor Custo-Benefício
+              </div>
+              <p className="text-sm font-semibold text-prime uppercase">Ecossistema Full (Projeto Completo)</p>
+              <h3 className="text-2xl font-extrabold text-slate-900 mt-1">Todos os módulos + Gestão Unificada</h3>
+              <div className="mt-4">
+                <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <span className="line-through">R$ 40.000</span>
+                  <span className="text-emerald-700 font-bold">-37% OFF</span>
+                </div>
+                <div className="text-4xl font-extrabold text-slate-900">R$ 25.000</div>
+                <p className="text-sm text-slate-600">Investimento Único (Setup)</p>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <span className="line-through">R$ 4.000/mês</span>
+                </div>
+                <div className="text-2xl font-bold text-prime">R$ 2.500<span className="text-sm font-normal text-slate-500">/mês</span></div>
+                <p className="text-sm text-slate-600">Manutenção e servidores</p>
+              </div>
+
+              <div className="mt-5 border-t border-slate-200 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  "Agente SDR + Agendamento",
+                  "Agente FAQ Inteligente",
+                  "Agente Anti No-Show",
+                  "Integração Tasy Completa",
+                  "CRM + Dashboard Executivo",
+                  "Treinamento + 30 dias assistidos",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6">
+                <a
+                  href="#cta"
+                  className="inline-flex w-full items-center justify-center rounded-lg bg-prime-accent px-5 py-3 text-prime-dark font-semibold shadow-md shadow-prime/15 hover:bg-sky-400 transition-colors"
+                >
+                  Selecionar Pacote Completo
+                </a>
+              </div>
             </div>
-         </div>
+
+            <div className="md:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+              <h3 className="text-lg font-bold text-slate-900">Condições de Pagamento</h3>
+              <div className="mt-4">
+                <p className="text-sm font-semibold text-slate-800">Investimento Único (Setup)</p>
+                <ul className="mt-2 space-y-2 text-sm text-slate-700">
+                  <li>Opção A: À vista (5% de desconto no PIX/TED)</li>
+                  <li>Opção B: Entrada + 4 parcelas (Boleto Bancário)</li>
+                  <li>Opção C: Até 3x sem juros (Cartão Corporativo)</li>
+                </ul>
+              </div>
+              <div className="mt-4">
+                <p className="text-sm font-semibold text-slate-800">Mensalidade (Recorrência)</p>
+                <ul className="mt-2 space-y-2 text-sm text-slate-700">
+                  <li>Vencimento inicia apenas 30 dias após o Go-Live.</li>
+                  <li>Formato: Boleto mensal ou PIX recorrente.</li>
+                </ul>
+              </div>
+              <div className="mt-4 rounded-lg bg-slate-50 border border-slate-200 p-3 text-xs text-slate-600">
+                “O valor mensal já contempla: Custos de servidor, Banco de Dados, Suporte Técnico (SLA 24h úteis), Backups diários e Manutenção evolutiva.”
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* CTA FINAL */}
