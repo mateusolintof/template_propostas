@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, createContext, useContext } from "react";
 
 type ToastType = "success" | "error" | "info";
 
@@ -37,10 +37,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, x: 20 }}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border ${toast.type === "success"
-                                    ? "bg-white border-emerald-100 text-emerald-800"
-                                    : toast.type === "error"
-                                        ? "bg-white border-red-100 text-red-800"
-                                        : "bg-white border-blue-100 text-blue-800"
+                                ? "bg-white border-emerald-100 text-emerald-800"
+                                : toast.type === "error"
+                                    ? "bg-white border-red-100 text-red-800"
+                                    : "bg-white border-blue-100 text-blue-800"
                                 }`}
                         >
                             {toast.type === "success" && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}

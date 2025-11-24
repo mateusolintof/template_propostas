@@ -16,15 +16,14 @@ import {
     ShieldCheck,
     Briefcase
 } from "lucide-react";
-import Modal from "../../components/Modal";
-import { type FlowKind } from "../../components/FlowDiagram";
+import Modal from "../../../components/Modal";
+import { type FlowKind } from "../../../components/FlowDiagram";
 import { getProposalBySlug } from "../../../lib/proposals";
 import { Proposal, defaultProposal } from "../../../types/proposal";
-import { notFound } from "next/navigation";
 
 // Lazy Imports dos Modais - Adjusted paths
 const FlowDiagramLazy = dynamic<{ kind: FlowKind }>(
-    () => import("../../components/FlowDiagram"),
+    () => import("../../../components/FlowDiagram"),
     {
         ssr: false,
         loading: () => (
@@ -41,15 +40,15 @@ const ModalContentFallback = () => (
     </div>
 );
 
-const RoiModalLazy = dynamic<{ preparedFor: string }>(() => import("../../components/modal-content/RoiModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const CRMModalLazy = dynamic(() => import("../../components/modal-content/CRMModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const DashboardModalLazy = dynamic(() => import("../../components/modal-content/DashboardModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const PhaseDetailModalLazy = dynamic<{ phase: 1 | 2 | 3 | 4 }>(() => import("../../components/modal-content/PhaseDetailModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const ConquistasModalLazy = dynamic(() => import("../../components/modal-content/ConquistasModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const InteligenciaModalLazy = dynamic(() => import("../../components/modal-content/InteligenciaModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const InsightsModalLazy = dynamic(() => import("../../components/modal-content/InsightsModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
-const RelatoriosModalLazy = dynamic(() => import("../../components/modal-content/RelatoriosModalContentDoc"), { ssr: false, loading: () => <ModalContentFallback /> });
-const EtapaModalLazy = dynamic<{ etapa: 1 | 2 | 3 | 4 }>(() => import("../../components/modal-content/EtapaModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const RoiModalLazy = dynamic<{ preparedFor: string }>(() => import("../../../components/modal-content/RoiModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const CRMModalLazy = dynamic(() => import("../../../components/modal-content/CRMModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const DashboardModalLazy = dynamic(() => import("../../../components/modal-content/DashboardModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const PhaseDetailModalLazy = dynamic<{ phase: 1 | 2 | 3 | 4 }>(() => import("../../../components/modal-content/PhaseDetailModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const ConquistasModalLazy = dynamic(() => import("../../../components/modal-content/ConquistasModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const InteligenciaModalLazy = dynamic(() => import("../../../components/modal-content/InteligenciaModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const InsightsModalLazy = dynamic(() => import("../../../components/modal-content/InsightsModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
+const RelatoriosModalLazy = dynamic(() => import("../../../components/modal-content/RelatoriosModalContentDoc"), { ssr: false, loading: () => <ModalContentFallback /> });
+const EtapaModalLazy = dynamic<{ etapa: 1 | 2 | 3 | 4 }>(() => import("../../../components/modal-content/EtapaModalContent"), { ssr: false, loading: () => <ModalContentFallback /> });
 
 const getEtapaTitle = (etapa: 1 | 2 | 3 | 4) => {
     const titles = { 1: "Recepção", 2: "Agente SDR", 3: "Triagem", 4: "Atendimento" };

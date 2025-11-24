@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { db, storage } from "../../lib/firebase";
-import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, doc, updateDoc, Firestore } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, FirebaseStorage } from "firebase/storage";
 import { Proposal, defaultProposal } from "../../types/proposal";
 import { motion, AnimatePresence } from "framer-motion";
 import { Upload, Save, Palette, LayoutGrid, DollarSign, User, ChevronRight } from "lucide-react";
@@ -36,7 +36,7 @@ export default function ProposalForm({ initialData, isEditing = false }: Proposa
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleNestedChange = (section: "branding" | "pricing", field: string, value: any) => {
+    const handleNestedChange = (section: "branding" | "pricing", field: string, value: string | number | boolean | undefined) => {
         setFormData((prev) => ({
             ...prev,
             [section]: { ...prev[section], [field]: value },
@@ -50,10 +50,10 @@ export default function ProposalForm({ initialData, isEditing = false }: Proposa
         }));
     };
 
-    const handleLogoUpload = async () => {
+    const handleLogoUpload = async (currentStorage: FirebaseStorage) => {
         if (!logoFile) return formData.branding.logoUrl;
 
-        const storageRef = ref(storage, `logos/${Date.now()}_${logoFile.name}`);
+        const storageRef = ref(currentStorage, `logos/${Date.now()}_${logoFile.name}`);
         await uploadBytes(storageRef, logoFile);
         return await getDownloadURL(storageRef);
     };
@@ -62,14 +62,18 @@ export default function ProposalForm({ initialData, isEditing = false }: Proposa
         e.preventDefault();
         setLoading(true);
 
-        if (!db || !storage) {
+        // Create local references to ensure type safety
+        const currentDb = db;
+        const currentStorage = storage;
+
+        if (!currentDb || !currentStorage) {
             showToast("Modo Demo: Alterações simuladas com sucesso!", "info");
             setTimeout(() => router.push("/admin"), 1500);
             return;
         }
 
         try {
-            const logoUrl = await handleLogoUpload();
+            const logoUrl = await handleLogoUpload(currentStorage);
 
             const dataToSave = {
                 ...formData,
@@ -78,9 +82,9 @@ export default function ProposalForm({ initialData, isEditing = false }: Proposa
             };
 
             if (isEditing && initialData?.id) {
-                await updateDoc(doc(db, "proposals", initialData.id), dataToSave);
+                await updateDoc(doc(currentDb, "proposals", initialData.id), dataToSave);
             } else {
-                await addDoc(collection(db, "proposals"), {
+                await addDoc(collection(currentDb, "proposals"), {
                     ...dataToSave,
                     createdAt: new Date().toISOString()
                 });
@@ -105,8 +109,8 @@ export default function ProposalForm({ initialData, isEditing = false }: Proposa
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${activeTab === tab.id
-                                ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                                : "text-slate-600 hover:bg-white hover:shadow-sm"
+                            ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                            : "text-slate-600 hover:bg-white hover:shadow-sm"
                             }`}
                     >
                         <tab.icon className="w-4 h-4" />
